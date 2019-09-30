@@ -10,7 +10,7 @@ import pyglet
 import _thread
 
 # class imports
-from scenes.select_level import SelectLevel
+from scenes.main_game import MainGame
 
 #
 #   CLASS
@@ -47,7 +47,7 @@ class MainMenu(cocos.scene.Scene):
 
         menu.create_menu(menuItems, cocos.menu.shake(), cocos.menu.shake_back())
         menu.on_quit = self.on_quit
-        menu.position = -400,-80
+        menu.position = 350,-200
 
         self.add(menu, z=1)
         self.add(self.initSprite, z=0)
@@ -56,7 +56,7 @@ class MainMenu(cocos.scene.Scene):
 
     def on_new_game(self):
         print("newgame")
-        self.director.push(SelectLevel(self.director))
+        self.director.push(MainGame(self.director))
 
     def on_info(self):
         print("info")
