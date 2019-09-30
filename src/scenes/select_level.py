@@ -36,11 +36,13 @@ class SelectLevel(cocos.scene.Scene):
         initBG = pyglet.image.load('../res/selectStage.png')
         self.initSprite = cocos.sprite.Sprite(initBG, position=(640,360))
 
-        back_button = Button(67, 644, '../res/back.png', self, self.back, toAdjust=True)
+        back_button = Button(73, 651, '../res/back.png', self, self.back)
         back_button.setHasHighlight('../res/back_h.png')
 
-        sel_mit = Button(416, 281, '../res/selectMitosis.PNG', self, self.on_mitosis_select)
-        sel_mei = Button(890, 281, '../res/selectMeiosis.PNG', self, self.on_meiosis_select)
+        sel_mit = Button(381, 297, '../res/selectMitosis.PNG', self, self.on_mitosis_select)
+        sel_mit.setHasHighlight('../res/selectMitosis_h.PNG')
+        sel_mei = Button(892, 304, '../res/selectMeiosis.PNG', self, self.on_meiosis_select)
+        sel_mei.setHasHighlight('../res/selectMeiosis_h.PNG')
 
 
         #   416 281

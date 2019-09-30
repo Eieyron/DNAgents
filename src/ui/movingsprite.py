@@ -23,10 +23,11 @@ from cocos import mapcolliders
 # 
 
 # constants
-STATIC = 0
-STANDBY = 1
-WALK_LEFT = 2
-WALK_RIGHT = 3
+LEFT = 0
+RIGHT = 1
+UP = 2
+DOWN = 3
+STATIC = 4
 
 TERRAIN_RECTANGLES = 0
 INTERACTION_BLOCKS = 1
@@ -51,23 +52,12 @@ def createMPCH(collision_layers):
 # definition
 class MovingSprite(cocos.sprite.Sprite):
 # init
-    def __init__(self, position, objName, frames, collision_layers):
+    def __init__(self, position, objName, collision_layers):
         
         self.name = objName
-        self.sprites = []
+        self.sprites = {}
         self.mapcolliders, self.collision_handlers = createMPCH(collision_layers)
         self.move_blocks = 0
-
-        for name in os.listdir('../res/'+objName+'_sprite/'):
-            if(name == objName+'_ss.png'):
-                break
-            self.sprites.append(pyglet.image.load('../res/'+objName+'_sprite/'+name))
-
-        img = pyglet.image.load('../res/'+objName+'_sprite/'+objName+'_ss.png')
-        ss = pyglet.image.ImageGrid(img, 1, frames, item_width=120, item_height=120)
-        self.sprites.append(pyglet.image.Animation.from_image_sequence(ss[0:], 0.1, loop=True))
-
-        super(MovingSprite, self).__init__(self.sprites[len(self.sprites)-1], position=position)
 
         # sprite state
         self.velocity = (0,0)
@@ -76,6 +66,42 @@ class MovingSprite(cocos.sprite.Sprite):
         self.y_anchor = 0
         self.currentState = 0
         self.gravity = -500
+        self.face_stack = [] # stack for what position the sprite is facing
+        self.faces_enabled = {  'left':False,
+                                'right':False,
+                                'up':False,
+                                'down':False,
+                                'static':False,
+                                'none':False} # left, right, up, down -- a list that signifies which faces have sprites to be read
+        
+        for name in os.listdir('../res/'+objName+'_sprite/'):
+
+            # loads the sprite and puts it in a spritesheet
+            img = pyglet.image.load('../res/'+objName+'_sprite/'+name)
+            frames = img.width // 120
+            img = pyglet.image.ImageGrid(img, 1, frames, item_width=120, item_height=120)
+            spritify = pyglet.image.Animation.from_image_sequence(img[0:], 0.1, loop=True)
+            # self.sprites.append(spritify)
+
+            # sets which sprites are active
+            if(name == objName+'_left.png'):
+                self.faces_enabled['left'] = True;
+                self.sprites['left'] = spritify
+            elif(name == objName+'_right.png'):
+                self.faces_enabled['right'] = True;
+                self.sprites['right'] = spritify
+            elif(name == objName+'_up.png'):
+                self.faces_enabled['up'] = True;
+                self.sprites['up'] = spritify
+            elif(name == objName+'_down.png'):
+                self.faces_enabled['down'] = True;
+                self.sprites['down'] = spritify
+            elif(name == objName+'_static.png'):
+                self.faces_enabled['static'] = True;
+                self.sprites['static'] = spritify
+
+        super(MovingSprite, self).__init__(self.sprites['static'], position=position)
+
  
         # collision
         
@@ -108,8 +134,10 @@ class MovingSprite(cocos.sprite.Sprite):
             self.currentState = len(self.sprites)-1
             self.onground = True
 
-    def setSprite(self, int):
-        self.image = self.sprites[int]
+    def setSprite(self, spriteName):
+        # print('set sprite to',spriteName)
+        if self.faces_enabled[spriteName]:
+            self.image = self.sprites[spriteName]
 
     def reset(self):
         self.velocity = (0,0)
@@ -123,64 +151,39 @@ class MovingSprite(cocos.sprite.Sprite):
     # interaction block methods
     def interaction_block_collide_right(self, obj):
         # print(obj)
+        self.general_collide(obj)
+        
+
+    def interaction_block_collide_left(self, obj):
+        
+        self.general_collide(obj)
+
+    def interaction_block_collide_bottom(self, obj):
+
+        self.general_collide(obj)
+
+
+    def interaction_block_collide_up(self, obj):
+        
+        self.general_collide(obj)
+
+    def general_collide(self, obj):
+
+        # general collide function
+
         if obj.name == "portal":
             print("portal")
             self.portal_hit()
-        elif obj.name == "button":
-            print("button")
-        elif obj.name == "chromatin":
+        elif obj.name == "protein":
             # obj.moveBy(120)
             if self.move_blocks != 0:
                 for block in self.move_blocks:
-                    if block.spr.name == "chromatin" and block.spr.tmxObj == obj:
-                        block.spr.moveRight()
-        elif obj.name == "centrosome":
-            # obj.moveBy(120)
-            if self.move_blocks != 0:
-                for block in self.move_blocks:
-                    if block.spr.name == "centrosome" and block.spr.tmxObj == obj:
-                        block.spr.moveRight()
-        else:
-            print(obj.name)
-
-    def interaction_block_collide_left(self, obj):
-        if obj.name == "portal":
-            self.portal_hit()
-        elif obj.name == "button":
-            pass
-        elif obj.name == "chromatin":
-            # obj.moveBy(120)
-            if self.move_blocks != 0:
-                for block in self.move_blocks:
-                    if block.spr.name == "chromatin" and block.spr.tmxObj == obj:
-                        block.spr.moveLeft()
-        elif obj.name == "centrosome":
-            # obj.moveBy(120)
-            if self.move_blocks != 0:
-                for block in self.move_blocks:
-                    if block.spr.name == "centrosome" and block.spr.tmxObj == obj:
-                        block.spr.moveLeft()
-        else:
-            print(obj.name)
-
-    def interaction_block_collide_bottom(self, obj):
-        # print(obj.name == "portal")
-        if obj.name == "portal":
-            self.portal_hit()
-        elif obj.name == "button":
-            pass
-        else:
-            print(obj.name)
-
-    def interaction_block_collide_up(self, obj):
-        # print(obj.name == "portal")
-        if obj.name == "portal":
-            self.portal_hit()
-        elif obj.name == "button":
-            pass
+                    if block.spr.name == "protein" and block.spr.tmxObj == obj:
+                        block.spr.vanish()
         else:
             print(obj.name)
 
     # set standby animation (default walk right)
     def collide_bottom(self, obj):
-        self.setStandby(obj)
+        # self.setStandby(obj)
+        pass

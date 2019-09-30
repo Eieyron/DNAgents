@@ -24,8 +24,6 @@ from cocos import mapcolliders
 # 
 
 # global
-GRAVITY = -500
-
 # constants
 
 TERRAIN_RECTANGLES = 0
@@ -35,7 +33,7 @@ INTERACTION_BLOCKS = 1
 XVELOCITY = 0
 YVELOCITY = 1
 
-class KeyMove(cocos.actions.WrappedMove):
+class KeyMove(cocos.actions.Move):
 
     def __init__(self, width, height, doesCollide):
         super().__init__(width, height)
@@ -43,43 +41,22 @@ class KeyMove(cocos.actions.WrappedMove):
     
     def step(self, dt):
 
+        # super(KeyMove, self).step(dt)
+
         # catches the keyboard movements
-        xvel = ((key.D in keys) - (key.A in keys)) * 500
-        yvel = 1
+        xvel = ((key.D in keys) - (key.A in keys)) * 5
+        yvel = ((key.W in keys) - (key.S in keys)) * 3
+
+        # print((key.W in keys) - (key.S in keys))
 
         if(self.doesCollide):
 
 
-            if key.SPACE in keys:
-
-                if not self.target.jumping and self.target.onground:
-                    self.target.jumping = True
-                    self.target.y_anchor = self.target.y+180
-
-                if self.target.y >= self.target.y_anchor:
-                    # if the anchor is reached
-                    self.target.jumping = False
-                
-                if self.target.jumping and self.target.y < self.target.y_anchor:
-                    # while still jumping, add yvelocity
-                    yvel += 2000
-
-                self.target.setStatic(0)
-
-
-            if not self.target.mapcolliders[TERRAIN_RECTANGLES].bumped_y:
-                # if falling
-                self.target.setStatic(0)
-
-            yvel += GRAVITY
-            dx = xvel * dt
-            dy = yvel * dt
-
             last = self.target.get_rect()
 
             new = last.copy()
-            new.x += dx
-            new.y += dy
+            new.x += xvel
+            new.y += yvel
 
 
             for ch in self.target.collision_handlers:
@@ -96,19 +73,7 @@ class KeyMove(cocos.actions.WrappedMove):
 
                     ch(last, cp_new, xvel, yvel)
 
-            # WRAP algorithm
-            x, y = new.center
-            w, h = self.target.width, self.target.height
-            # XXX assumes center anchor
-            if x > self.width + w/2:
-                x -= self.width + w
-            elif x < 0 - w/2:
-                x += self.width + w
-            if y > self.height + h/2:
-                y -= self.height + h
-            elif y < 0 - h/2:
-                y += self.height + h
-            self.target.position = (x, y)
+            self.target.position = new.center
 
             scrl.set_focus(*self.target.position)
 
@@ -118,7 +83,7 @@ class KeyMove(cocos.actions.WrappedMove):
             xvel = ((key.RIGHT in keys) - (key.LEFT in keys)) 
             yvel = ((key.UP in keys) - (key.DOWN in keys)) 
             self.target.velocity = (xvel, yvel)
-            print(self.target.position)
+            # print(self.target.position)
 
         # print(self.target.velocity)
 
@@ -143,15 +108,23 @@ class ControlledMover(cocos.layer.Layer):
 
         self.target.do(KeyMove(1920,1080, doesCollide))
 
-    def on_key_press(self, key, modifiers):
+    def on_key_press(self, k, modifiers):
         global keys
-        keys.add(key)
+        keys.add(k)
 
+        self.target.setSprite((
+            'left' if k == key.A else
+            'right' if k == key.D else
+            'up' if k == key.W else
+            'down' if k == key.S else 'none'
+            ))
         # print(keys)
 
     def on_key_release(self, key, modifiers):
         global keys
         keys.remove(key)
+
+        self.target.setSprite(('static' if len(keys) == 0 else 'none'))
 
         # print(keys)
 

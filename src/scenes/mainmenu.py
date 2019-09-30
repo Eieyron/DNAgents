@@ -46,6 +46,7 @@ class MainMenu(cocos.scene.Scene):
         menuItems.append(cocos.menu.MenuItem("Quit", self.on_quit))
 
         menu.create_menu(menuItems, cocos.menu.shake(), cocos.menu.shake_back())
+        menu.on_quit = self.on_quit
         menu.position = -400,-80
 
         self.add(menu, z=1)

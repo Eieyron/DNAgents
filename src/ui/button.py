@@ -30,8 +30,8 @@ class KeyMove(cocos.actions.Move):
     def step(self, dt):
         super(KeyMove, self).step(dt)
         # print(keys)
-        xvel = ((key.RIGHT in keys) - (key.LEFT in keys)) * 10
-        yvel = ((key.UP in keys) - (key.DOWN in keys)) * 10
+        xvel = ((key.RIGHT in keys) - (key.LEFT in keys)) * 50
+        yvel = ((key.UP in keys) - (key.DOWN in keys)) * 50
         self.target.velocity = (xvel, yvel)
         print(self.target.position)
 
@@ -55,6 +55,7 @@ class Button(cocos.layer.Layer):
         self.parent = parent
         self.action = action
         self.highlight = False
+        self.active = True
         super().__init__()
 
         self.image = pyglet.image.load(picDir)
@@ -74,6 +75,11 @@ class Button(cocos.layer.Layer):
         self.highlight = True
         self.image_h = pyglet.image.load(picDir)
 
+    def setInactive(self, picDir):
+        self.active = False
+        self.image_h = pyglet.image.load(picDir)
+
+
     # def setVelocity(self, point):
     #     self.velocity = point
 
@@ -89,7 +95,7 @@ class Button(cocos.layer.Layer):
                 self.setSprite(self.image)
 
     def on_mouse_press(self, x, y, button, mod):
-        if self.onHover:
+        if self.onHover and self.active:
             self.action()
 
     def on_key_press(self, key, modifiers):

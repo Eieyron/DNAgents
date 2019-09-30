@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="120" tileheight="120" infinite="0" nextlayerid="5" nextobjectid="54">
+ <tileset firstgid="1" source="tilesets/mitosis_tileset.tsx"/>
+ <layer id="1" name="terrain" width="16" height="9">
+  <data encoding="csv">
+28,25,25,25,25,25,27,0,0,0,0,0,0,0,0,0,
+4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,
+4,4,4,4,4,4,15,0,0,0,0,28,25,25,25,27,
+15,4,4,4,1,15,0,0,0,0,0,1,1,1,1,1,
+0,4,4,4,4,0,0,0,0,0,0,1,1,1,1,1,
+0,15,4,4,5,5,5,0,0,5,1,1,4,4,1,1,
+0,0,15,5,5,5,5,5,2,5,5,4,15,15,1,1,
+0,0,0,8,5,5,5,5,5,5,16,15,0,1,1,1,
+0,0,0,0,16,5,5,5,16,16,0,0,0,1,1,15
+</data>
+ </layer>
+ <objectgroup id="2" name="terrain_rectangles">
+  <object id="29" x="604" y="352" width="714" height="246"/>
+  <object id="30" x="844" y="596" width="232" height="122"/>
+  <object id="31" x="716" y="234" width="602" height="118"/>
+  <object id="32" x="834" y="-10" width="1100" height="246"/>
+  <object id="33" x="1320" y="242" width="590" height="118"/>
+  <object id="34" x="-24" y="-22" width="858" height="138"/>
+  <object id="35" x="-94" y="94" width="90" height="286"/>
+  <object id="36" x="-90" y="356" width="204" height="388"/>
+  <object id="37" x="4" y="604" width="230" height="198"/>
+  <object id="38" x="180" y="720" width="174" height="164"/>
+  <object id="39" x="286" y="838" width="188" height="138"/>
+  <object id="40" x="432" y="960" width="162" height="146"/>
+  <object id="41" x="582" y="1076" width="420" height="188"/>
+  <object id="42" x="960" y="956" width="602" height="262"/>
+  <object id="43" x="1198" y="834" width="358" height="262"/>
+  <object id="44" x="1438" y="722" width="242" height="116"/>
+  <object id="45" x="1806" y="960" width="206" height="262"/>
+  <object id="46" x="1548" y="1064" width="340" height="160"/>
+  <object id="47" x="1912" y="212" width="362" height="840"/>
+ </objectgroup>
+ <objectgroup id="3" name="interaction_blocks">
+  <object id="26" name="user" x="74" y="160"/>
+  <object id="49" name="portal" x="1672" y="953.333"/>
+  <object id="53" name="protein" x="408" y="416"/>
+ </objectgroup>
+ <objectgroup id="4" name="pass_through"/>
+</map>

@@ -31,14 +31,14 @@ class InformationLayer(cocos.layer.ColorLayer):
 
     # init
 
-    def __init__(self, scroller, rect, width=1280, height=720):
+    def __init__(self, scroller, target, width=1280, height=720):
         super().__init__(57, 67, 63, 0, width=width, height=height)
         
         picDir = '../res/info_layers/niccleus.png'
 
         self.scroller = scroller
         self.opacity = 0
-        self.target = rect
+        self.target = target
 
         self.image = pyglet.image.load(picDir)
         self.spr = cocos.sprite.Sprite(self.image, position=(640,360))

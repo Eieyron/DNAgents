@@ -18,9 +18,11 @@ from ui.game_objects.portal import Portal
 from ui.game_objects.duplicator import Duplicator
 from ui.game_objects.chromatin import Chromatin
 from ui.game_objects.centrosome import Centrosome
+from ui.game_objects.protein import Protein
 from ui.gamebackground import GameBackground, GameLayer
 from ui.floatingsprite import FloatingSprite
 from ui.informationlayer import InformationLayer
+from ui.inventorylayer import InventoryLayer
 from ui.button import Button
 from cocos import mapcolliders
 # from test import Test
@@ -48,10 +50,9 @@ def createBlocks(self, layers, collision_layers):
             other_blocks.append(user)
         elif block.name == "portal":
             other_blocks.append(Portal(*(block.get_center()), "portal"))
-        elif block.name == "chromatin":
-            other_blocks.append(Chromatin(block, collision_layers))
-        elif block.name == "centrosome":
-            other_blocks.append(Centrosome(block, collision_layers))
+        elif block.name == "protein":
+            other_blocks.append(Protein(self, block, "protein"))
+
         else:
             print(str(block.name)+" @ "+str(block.get_center()))
 
@@ -78,7 +79,7 @@ class Interphase(cocos.scene.Scene):
 
         bg = GameBackground('../res/mitosis_stage_bg.png')
         
-        layers = GameLayer('interphase')
+        layers = GameLayer('interphase_new')
 
         # terrain management
         collision_layers = layers.layers[1:]
@@ -86,7 +87,6 @@ class Interphase(cocos.scene.Scene):
         # blocks management
         user, move_blocks = createBlocks(self, layers, collision_layers)
         user.spr.move_blocks = move_blocks
-
 
         # add visible layers to the scroller
         scroller = cocos.layer.ScrollingManager()
@@ -96,21 +96,31 @@ class Interphase(cocos.scene.Scene):
             scroller.add(block,1)
 
         # to be added to static layer
-        test_layer = InformationLayer(scroller, user.spr)
+        NucleusInfo = InformationLayer(scroller, user.spr)
 
-        back_button = Button(65, 650, '../res/back.png', self, self.back)
+        back_button = Button(73, 651, '../res/back.png', self, self.back)
         back_button.setHasHighlight('../res/back_h.png')
 
+        inventory_button = Button(1212, 653, '../res/info_button.png', self, self.inventory)
+        self.inventory_popup = InventoryLayer(scroller, inventory_button.spr)
 
         # add movers to the scene
         self.add(back_button, 2)
-        self.add(test_layer, 1)
+        self.add(inventory_button, 1)
+        self.add(NucleusInfo, 1)
+        self.add(self.inventory_popup, 1)
         self.add(scroller, 0)
         self.add(ControlledMover(user.spr, scroller, doesCollide=True), 0)
-
 
 # setters/getters    
 
 # methods
     def back(self):
+        # self.director.scene_stack.show()
         self.director.pop()
+
+    def inventory(self):
+        # print("show inventory")
+        self.inventory_popup.show()
+
+

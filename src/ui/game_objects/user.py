@@ -31,7 +31,7 @@ class User(cocos.layer.ScrollableLayer):
     def __init__(self, x,y, picDir, collision_layers):
 
         super().__init__()
-        self.spr = MovingSprite((x,y), picDir, 5, collision_layers)
+        self.spr = MovingSprite((x,y), picDir, collision_layers)
 
         self.has_information_layer = False
 
