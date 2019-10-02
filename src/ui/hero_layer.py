@@ -36,7 +36,7 @@ class HeroLayer(cocos.layer.ColorLayer):
     def __init__(self, scroller, target, width=1280, height=720):
         super().__init__(57, 67, 63, 0, width=width, height=height)
         
-        picDir = '../res/inventory.png'
+        picDir = '../res/popup_resources/choose_hero_popup.png'
 
         self.scroller = scroller
         self.opacity = 0
@@ -45,8 +45,8 @@ class HeroLayer(cocos.layer.ColorLayer):
         self.image = pyglet.image.load(picDir)
         self.spr = cocos.sprite.Sprite(self.image, position=(640,360))
 
-        self.backButton = Button(1070,627, '../res/inventory_back.png',self,self.hide)
-        self.backButton.setHasHighlight('../res/inventory_back_h.png')
+        self.backButton = Button(1070,627, '../res/popup_resources/exit_button.png',self,self.hide)
+        self.backButton.setHasHighlight('../res/popup_resources/exit_button_h.png')
 
         self.highlight = False
         self.onHover = False
@@ -92,13 +92,13 @@ class HeroLayer(cocos.layer.ColorLayer):
         pass
 
     def show(self):
-        InventoryLayer.is_event_handler = True
+        HeroLayer.is_event_handler = True
         self.opacity = 70
         self.spr.do(Show())
         self.backButton.spr.do(Show())
 
     def hide(self):
-        InventoryLayer.is_event_handler = False
+        HeroLayer.is_event_handler = False
         self.opacity = 0
         self.spr.do(Hide())        
         self.backButton.spr.do(Hide())

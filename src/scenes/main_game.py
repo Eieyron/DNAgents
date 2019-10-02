@@ -41,25 +41,24 @@ class MainGame(cocos.scene.Scene):
 
         self.scroller = cocos.layer.ScrollingManager() 
         self.scroller.add(bg, 0)
-        self.add_pin(1403, 926)
-        self.add_pin(755, 656)
-        self.add_pin(127, 438)
-
         back_button = Button(73, 651, '../res/back.png', self, self.back)
         back_button.setHasHighlight('../res/back_h.png')
 
         left_button = Button(1050, 90, '../res/main_left.png', self, self.set_pos_left)
-
         right_button = Button(1190, 90, '../res/main_right.png', self, self.set_pos_right)
 
         self.add(back_button, z=1)
         self.add(left_button, z=1)
         self.add(right_button, z=1)
         self.add(self.scroller, z=0)
-       
+        
         # initial view position
         self.scroller.set_focus(*self.pos)
 
+        self.add_pin(1403, 926)
+        self.add_pin(755, 656)
+        self.add_pin(127, 438)
+        
         '''
                 1280, 720
             960, 540
@@ -73,15 +72,16 @@ class MainGame(cocos.scene.Scene):
         self.director.pop()
         print("select stage back")       
 
-    #def choose_hero(self):
-        # print("show inventory")
-        #self.inventory_popup.show()
+    def choose_hero(self):
+        self.hero_popup.show()
     
     def add_pin(self, x, y):
-        pin_button = ScrollableButton(x, y, '../res/pin.png', self, self.back)
+        pin_button = ScrollableButton(x, y, '../res/pin.png', self, self.choose_hero)
         pin_button.setHasHighlight('../res/pin_h.png')        
         self.scroller.add(pin_button, 0)
-
+        self.hero_popup = HeroLayer(self.scroller, pin_button.spr)
+        self.add(self.hero_popup, z=1)
+    
     def set_pos_right(self):
         th.start_new_thread(self.pos_right, ())
 
