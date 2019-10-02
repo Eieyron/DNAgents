@@ -18,7 +18,9 @@ import time
 # class imports
 from scenes.select_mitosis_level import SelectMitosisLevel
 from ui.button import Button
-from ui.gamebackground import GameBackground, GameLayer
+from ui.gamebackground import GameBackground
+from ui.scrollable_button import ScrollableButton
+from ui.hero_layer import HeroLayer
 # 
 #   CLASS
 # 
@@ -39,23 +41,24 @@ class MainGame(cocos.scene.Scene):
 
         self.scroller = cocos.layer.ScrollingManager() 
         self.scroller.add(bg, 0)
+        self.add_pin(1403, 926)
+        self.add_pin(755, 656)
+        self.add_pin(127, 438)
 
         back_button = Button(73, 651, '../res/back.png', self, self.back)
         back_button.setHasHighlight('../res/back_h.png')
 
-        prev_button = Button(1050, 90, '../res/main_prev.png', self, self.set_pos_next)
+        left_button = Button(1050, 90, '../res/main_left.png', self, self.set_pos_left)
 
-        next_button = Button(1190, 90, '../res/main_next.png', self, self.set_pos_prev)
+        right_button = Button(1190, 90, '../res/main_right.png', self, self.set_pos_right)
 
         self.add(back_button, z=1)
-        self.add(prev_button, z=1)
-        self.add(next_button, z=1)
+        self.add(left_button, z=1)
+        self.add(right_button, z=1)
         self.add(self.scroller, z=0)
-
+       
         # initial view position
         self.scroller.set_focus(*self.pos)
-        
-        
 
         '''
                 1280, 720
@@ -68,38 +71,45 @@ class MainGame(cocos.scene.Scene):
 # methods
     def back(self):
         self.director.pop()
-        print("select stage back")
+        print("select stage back")       
 
-    def set_pos_next(self):
-        th.start_new_thread(self.pos_prev, ())            
+    #def choose_hero(self):
+        # print("show inventory")
+        #self.inventory_popup.show()
+    
+    def add_pin(self, x, y):
+        pin_button = ScrollableButton(x, y, '../res/pin.png', self, self.back)
+        pin_button.setHasHighlight('../res/pin_h.png')        
+        self.scroller.add(pin_button, 0)
 
-    def set_pos_prev(self):
-        th.start_new_thread(self.pos_next, ())
+    def set_pos_right(self):
+        th.start_new_thread(self.pos_right, ())
 
-    def pos_next(self):
+    def set_pos_left(self):
+        th.start_new_thread(self.pos_left, ())            
+
+    def pos_right(self):
         if self.pos[0] < 960:
             while self.pos[0] < 960:
                 time.sleep(0.025)
                 self.pos_op ('add')
                 self.scroller.set_focus(*self.pos)   
-        elif self.pos[0] == 960:
+        elif self.pos[0] >= 960:
             while self.pos[0] < 1280:
                 time.sleep(0.025)
                 self.pos_op ('add')
                 self.scroller.set_focus(*self.pos)
 
-    def pos_prev(self):    
+    def pos_left(self):    
         if self.pos[0] > 960:
             while self.pos[0] > 960:
                 time.sleep(0.025)
                 self.pos_op ('min')
-                print(*self.pos)
                 self.scroller.set_focus(*self.pos)   
         elif self.pos[0] <= 960:
             while self.pos[0] > 640:
                 time.sleep(0.025)
                 self.pos_op('min')
-                print(*self.pos)
                 self.scroller.set_focus(*self.pos)
         return
 
