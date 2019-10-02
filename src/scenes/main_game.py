@@ -12,12 +12,13 @@
 # imports
 import cocos
 import pyglet
-import _thread
+import _thread as th
+import time
 
 # class imports
 from scenes.select_mitosis_level import SelectMitosisLevel
 from ui.button import Button
-
+from ui.gamebackground import GameBackground, GameLayer
 # 
 #   CLASS
 # 
@@ -33,25 +34,34 @@ class MainGame(cocos.scene.Scene):
 
         super().__init__()
 
-        initBG = pyglet.image.load('../res/main_game_background.png')
-        self.initSprite = cocos.sprite.Sprite(initBG, position=(640,360))
+        bg = GameBackground('../res/main_game_background.png')        
+        self.pos = [1280, 720]
+
+        self.scroller = cocos.layer.ScrollingManager() 
+        self.scroller.add(bg, 0)
 
         back_button = Button(73, 651, '../res/back.png', self, self.back)
         back_button.setHasHighlight('../res/back_h.png')
 
-        sel_mit = Button(381, 297, '../res/selectMitosis.PNG', self, self.on_mitosis_select)
-        sel_mit.setHasHighlight('../res/selectMitosis_h.PNG')
-        sel_mei = Button(892, 304, '../res/selectMeiosis.PNG', self, self.on_meiosis_select)
-        sel_mei.setHasHighlight('../res/selectMeiosis_h.PNG')
+        prev_button = Button(1050, 90, '../res/main_prev.png', self, self.set_pos_next)
 
+        next_button = Button(1190, 90, '../res/main_next.png', self, self.set_pos_prev)
 
-        #   416 281
-        #   890 281
-
-        self.add(sel_mit, 1)
-        self.add(sel_mei, 1)
         self.add(back_button, z=1)
-        self.add(self.initSprite, z=0)
+        self.add(prev_button, z=1)
+        self.add(next_button, z=1)
+        self.add(self.scroller, z=0)
+
+        # initial view position
+        self.scroller.set_focus(*self.pos)
+        
+        
+
+        '''
+                1280, 720
+            960, 540
+        640, 360
+        '''
 
 # setters/getters
 
@@ -60,11 +70,43 @@ class MainGame(cocos.scene.Scene):
         self.director.pop()
         print("select stage back")
 
+    def set_pos_next(self):
+        th.start_new_thread(self.pos_prev, ())            
 
-    def on_mitosis_select(self):
-        print("mitosis")
-        self.director.push(SelectMitosisLevel(self.director))
+    def set_pos_prev(self):
+        th.start_new_thread(self.pos_next, ())
 
-    def on_meiosis_select(self):
-        print("meiosis")
+    def pos_next(self):
+        if self.pos[0] < 960:
+            while self.pos[0] < 960:
+                time.sleep(0.025)
+                self.pos_op ('add')
+                self.scroller.set_focus(*self.pos)   
+        elif self.pos[0] == 960:
+            while self.pos[0] < 1280:
+                time.sleep(0.025)
+                self.pos_op ('add')
+                self.scroller.set_focus(*self.pos)
 
+    def pos_prev(self):    
+        if self.pos[0] > 960:
+            while self.pos[0] > 960:
+                time.sleep(0.025)
+                self.pos_op ('min')
+                print(*self.pos)
+                self.scroller.set_focus(*self.pos)   
+        elif self.pos[0] <= 960:
+            while self.pos[0] > 640:
+                time.sleep(0.025)
+                self.pos_op('min')
+                print(*self.pos)
+                self.scroller.set_focus(*self.pos)
+        return
+
+    def pos_op(self, op):
+        if op == 'add':
+            self.pos[0] = self.pos[0] + 16/2
+            self.pos[1] = self.pos[1] + 9/2
+        else:
+            self.pos[0] = self.pos[0] - 16/2
+            self.pos[1] = self.pos[1] - 9/2

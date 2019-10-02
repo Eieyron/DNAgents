@@ -74,7 +74,6 @@ class KeyMove(cocos.actions.Move):
                     ch(last, cp_new, xvel, yvel)
 
             self.target.position = new.center
-
             scrl.set_focus(*self.target.position)
 
         else:
