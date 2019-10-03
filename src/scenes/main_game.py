@@ -41,12 +41,14 @@ class MainGame(cocos.scene.Scene):
 
         self.scroller = cocos.layer.ScrollingManager() 
         self.scroller.add(bg, 0)
-        back_button = Button(73, 651, '../res/back.png', self, self.back)
-        back_button.setHasHighlight('../res/back_h.png')
+        back_button = Button(73, 640, '../res/main_left.png', self, self.back)
+        back_button.setHasHighlight('../res/main_left_h.png')
 
         left_button = Button(1050, 90, '../res/main_left.png', self, self.set_pos_left)
+        left_button.setHasHighlight('../res/main_left_h.png')
         right_button = Button(1190, 90, '../res/main_right.png', self, self.set_pos_right)
-
+        right_button.setHasHighlight('../res/main_right_h.png')
+        
         self.add(back_button, z=1)
         self.add(left_button, z=1)
         self.add(right_button, z=1)
