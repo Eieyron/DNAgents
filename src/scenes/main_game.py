@@ -16,7 +16,6 @@ import _thread as th
 import time
 
 # class imports
-from scenes.select_mitosis_level import SelectMitosisLevel
 from ui.button import Button
 from ui.gamebackground import GameBackground
 from ui.scrollable_button import ScrollableButton
