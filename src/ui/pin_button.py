@@ -18,7 +18,6 @@ import pyglet
 # froms
 from pyglet.window import key
 
-
 # 
 #   CLASS
 # 
@@ -37,7 +36,7 @@ class KeyMove(cocos.actions.Move):
 
 # definition
 
-class ScrollableButton(cocos.layer.ScrollableLayer):
+class PinButton(cocos.layer.ScrollableLayer):
 
     is_event_handler = True
 
@@ -102,7 +101,7 @@ class ScrollableButton(cocos.layer.ScrollableLayer):
 
     def on_mouse_press(self, x, y, button, mod):
         if self.onHover and self.active:
-            
+            self.profile.information['minigame'] = self.minigame
             self.profile.information['problems'][self.button_num] = True
             self.action()
 
@@ -118,4 +117,7 @@ class ScrollableButton(cocos.layer.ScrollableLayer):
 
     def setSprite(self, img):
         self.spr.image = img
+
+
+
 

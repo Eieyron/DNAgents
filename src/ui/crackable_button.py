@@ -37,13 +37,13 @@ class KeyMove(cocos.actions.Move):
 
 # definition
 
-class ScrollableButton(cocos.layer.ScrollableLayer):
+class CrackButton(cocos.layer.ScrollableLayer):
 
     is_event_handler = True
 
     # init
 
-    def __init__(self, x, y, picDir, minigame, parent, profile, button_num, action, toAdjust=False):
+    def __init__(self, x, y, picDir, parent, action, toAdjust=False):
         global keys, container
 
         # is_event_handler = toAdjust
@@ -52,10 +52,7 @@ class ScrollableButton(cocos.layer.ScrollableLayer):
         container = parent
 
         self.toAdjust = toAdjust
-        self.minigame = minigame
         self.parent = parent
-        self.profile = profile
-        self.button_num = button_num
         self.action = action
         self.highlight = False
         self.active = True
@@ -88,9 +85,6 @@ class ScrollableButton(cocos.layer.ScrollableLayer):
 
     # methods
     def on_mouse_motion(self, x, y, dx, dy):
-        
-        x,y = self.parent.screen_to_world(x,y)
-
         if (not self.onHover) and self.spr.contains(x,y):
             self.onHover = True
             if self.highlight:
@@ -102,8 +96,6 @@ class ScrollableButton(cocos.layer.ScrollableLayer):
 
     def on_mouse_press(self, x, y, button, mod):
         if self.onHover and self.active:
-            
-            self.profile.information['problems'][self.button_num] = True
             self.action()
 
     def on_key_press(self, key, modifiers):

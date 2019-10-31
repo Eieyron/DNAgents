@@ -14,12 +14,15 @@ import cocos
 import pyglet
 import _thread as th
 import time
+import os
 
 # class imports
 from ui.button import Button
 from ui.gamebackground import GameBackground
 from ui.scrollable_button import ScrollableButton
 from ui.hero_layer import HeroLayer
+from ui.main_game_layer import MainGameLayer
+from profiles.profile import Profile
 # 
 #   CLASS
 # 
@@ -33,15 +36,21 @@ class MainGame(cocos.scene.Scene):
         
         self.director = director
 
+        self.bg = GameBackground('../res/main_game_backgrounds/main.png')   
+
         super().__init__()
 
-        bg = GameBackground('../res/main_game_background.png')        
-        self.pos = [1280, 720]
+        self.save_dir = 'profiles/save.json'
+        self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)
+        self.case = self.profile.information['case']
+
+        self.pos = [600, 0]
 
         self.scroller = cocos.layer.ScrollingManager() 
-        self.scroller.add(bg, 0)
-        back_button = Button(73, 640, '../res/main_left.png', self, self.back)
-        back_button.setHasHighlight('../res/main_left_h.png')
+        self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.bg)
+
+        back_button = Button(1199, 658, '../res/back_button.png', self, self.back)
+        back_button.setHasHighlight('../res/back_button_h.png')
 
         left_button = Button(1050, 90, '../res/main_left.png', self, self.set_pos_left)
         left_button.setHasHighlight('../res/main_left_h.png')
@@ -51,37 +60,61 @@ class MainGame(cocos.scene.Scene):
         self.add(back_button, z=1)
         self.add(left_button, z=1)
         self.add(right_button, z=1)
+        self.scroller.add(self.MGLayer, z=1)
         self.add(self.scroller, z=0)
         
         # initial view position
         self.scroller.set_focus(*self.pos)
 
-        self.add_pin(1403, 926)
-        self.add_pin(755, 656)
-        self.add_pin(127, 438)
-        
         '''
                 1280, 720
             960, 540
         640, 360
         '''
 
+        # main game backgrounds
+        mbg = [x for x in range(1,12)]
+
+        
 # setters/getters
 
 # methods
+    
+    def main_next(self):
+        #self.save_dir = 'profiles/save.json'
+        if self.check_probs():
+            self.profile.information['case'] += 1
+            self.case += 1
+            self.fix_probs()
+        self.profile.save(self.save_dir)
+        self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)        
+
+        self.scroller.remove(self.MGLayer)
+        # instantiate new Main Game Layer
+        self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.bg)
+        self.scroller.add(self.MGLayer, z=1)
+
+    def check_probs(self): # checks if all probs are done
+        for i in self.profile.information['problems']:
+            if i == False:
+                return False
+        return True
+
+    def fix_probs(self): # checks if case has 2 probs
+        if self.case == 2:
+            self.profile.information['problems'] = [False, False]
+        elif self.case == 4:
+            self.profile.information['problems'] = [False, False]
+        elif self.case == 6:
+            self.profile.information['problems'] = [False, False]
+        elif self.case == 7:
+            self.profile.information['problems'] = [False, False]
+        else:
+            self.profile.information['problems'] = [False]
+
     def back(self):
         self.director.pop()
         print("select stage back")       
-
-    def choose_hero(self):
-        self.hero_popup.show()
-    
-    def add_pin(self, x, y):
-        pin_button = ScrollableButton(x, y, '../res/pin.png', self, self.choose_hero)
-        pin_button.setHasHighlight('../res/pin_h.png')        
-        self.scroller.add(pin_button, 0)
-        self.hero_popup = HeroLayer(self.scroller, pin_button.spr)
-        self.add(self.hero_popup, z=1)
     
     def set_pos_right(self):
         th.start_new_thread(self.pos_right, ())
@@ -90,24 +123,25 @@ class MainGame(cocos.scene.Scene):
         th.start_new_thread(self.pos_left, ())            
 
     def pos_right(self):
-        if self.pos[0] < 960:
-            while self.pos[0] < 960:
-                time.sleep(0.025)
-                self.pos_op ('add')
-                self.scroller.set_focus(*self.pos)   
-        elif self.pos[0] >= 960:
-            while self.pos[0] < 1280:
+        if self.pos[0] < 854:
+            while self.pos[0] < 854:
                 time.sleep(0.025)
                 self.pos_op ('add')
                 self.scroller.set_focus(*self.pos)
+        elif self.pos[0] >= 854:
+            while self.pos[0] < 1067:
+                time.sleep(0.025)
+                self.pos_op ('add')
+                self.scroller.set_focus(*self.pos)
+        return
 
     def pos_left(self):    
-        if self.pos[0] > 960:
-            while self.pos[0] > 960:
+        if self.pos[0] > 854:
+            while self.pos[0] > 854:
                 time.sleep(0.025)
                 self.pos_op ('min')
                 self.scroller.set_focus(*self.pos)   
-        elif self.pos[0] <= 960:
+        elif self.pos[0] <= 854:
             while self.pos[0] > 640:
                 time.sleep(0.025)
                 self.pos_op('min')
@@ -117,7 +151,7 @@ class MainGame(cocos.scene.Scene):
     def pos_op(self, op):
         if op == 'add':
             self.pos[0] = self.pos[0] + 16/2
-            self.pos[1] = self.pos[1] + 9/2
+            #self.pos[1] = self.pos[1] + 9/2
         else:
             self.pos[0] = self.pos[0] - 16/2
-            self.pos[1] = self.pos[1] - 9/2
+            #self.pos[1] = self.pos[1] - 9/2

@@ -28,7 +28,7 @@ from scenes.mainmenu import MainMenu
 def main():
     director.init(  width=1280,
                     height=720,
-                    caption="Niccleus Travels")
+                    caption="DNAgents")
     director.window.pop_handlers()
 
     director.run(MainMenu(director))
