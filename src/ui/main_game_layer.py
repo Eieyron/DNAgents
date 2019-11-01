@@ -20,7 +20,7 @@ from ui.button import Button
 from ui.gamebackground import GameBackground
 from ui.pin_button import PinButton
 from ui.hero_layer import HeroLayer
-from scenes.helicase import HelicaseMinigame
+from scenes.helicase_minigame import HelicaseMinigame
 
 # 
 #   CLASS
@@ -103,9 +103,13 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
         else:
             self.bg.set_background(16)
         
-        for button in self.problem.values():
-            if button == None: continue
-            self.add_pin(button)
+        for i in range(1,(len(self.problem)+1)):
+            if self.problem[str(i)] == None: continue
+            self.add_pin(self.problem[str(i)], i)
+
+        # for button in self.problem.values():
+        #     if button == None: continue
+        #     self.add_pin(button)
 
 # setters/getters
 
@@ -113,9 +117,22 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
 
     def choose_hero(self):
         #self.hero_popup.show()
-        
+        try:
+            self.scroller.remove(self.pin_button1)
+            #print('pin 1 removed')
+        except:
+            print('')
+            #print('pin doesnt exist')
+        if len(self.problem) != 1:
+            
+            try:
+                self.scroller.remove(self.pin_button2)
+                #print('pin 2 removed')
+            except:
+                print('')
+                #print('pin doesnt exist')
+
         self.go_to_minigame()
-        self.scroller.remove(self.pin_button)
         self.scene.main_next()
 
 
@@ -131,13 +148,19 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
             print('ligase')
 
 
-    def add_pin(self, pin_button):
-        self.pin_button = pin_button
-        self.pin_button.setHasHighlight('../res/pin_h.png')        
-        
-        self.scroller.add(self.pin_button, 0)
-        self.hero_popup = HeroLayer(self.scroller, self.pin_button.spr)
-        self.scene.add(self.hero_popup, z=2)
+    def add_pin(self, pin_button, i):
+        i = i
+        if i == 1:
+            self.pin_button1 = pin_button
+            self.pin_button1.setHasHighlight('../res/pin_h.png')        
+            self.scroller.add(self.pin_button1, 0)
+        elif i == 2:
+            self.pin_button2 = pin_button
+            self.pin_button2.setHasHighlight('../res/pin_h.png')        
+            self.scroller.add(self.pin_button2, 0)
+
+        # self.hero_popup = HeroLayer(self.scroller, self.pin_button.spr)
+        # self.scene.add(self.hero_popup, z=2)
 
     def add_pin_test(self, x, y):
         pin_button = PinButton(x, y, '../res/pin.png', 'wew', self, self.profile, 0, self.choose_hero, True)
