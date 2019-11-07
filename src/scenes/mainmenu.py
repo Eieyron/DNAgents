@@ -37,8 +37,8 @@ class MainMenu(cocos.scene.Scene):
 
         # try:
         #    _thread.start_new_thread( self.random, () )
-        # except:
-        #    print("Error: unable to start thread")
+        # excMenuItemMenuItemMenuItemept:
+        #   MenuItem print("Error: unable to start thread")
            
         menuItems.append(cocos.menu.MenuItem("Start", self.on_new_game))
         menuItems.append(cocos.menu.MenuItem("Info", self.on_info))
@@ -47,7 +47,7 @@ class MainMenu(cocos.scene.Scene):
 
         menu.create_menu(menuItems, cocos.menu.shake(), cocos.menu.shake_back())
         menu.on_quit = self.on_quit
-        menu.position = 350,-200
+        menu.position = 150,-200
 
         self.add(menu, z=1)
         self.add(self.initSprite, z=0)

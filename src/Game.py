@@ -29,7 +29,7 @@ from scenes.minigame2 import MiniGame2
 def main():
     director.init(  width=1280,
                     height=720,
-                    caption="Niccleus Travels")
+                    caption="DNAgents")
     director.window.pop_handlers()
 
     director.run(MiniGame2(director))
