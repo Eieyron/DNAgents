@@ -19,6 +19,7 @@ from pyglet.window import key
 
 # class imports
 from scenes.mainmenu import MainMenu
+from scenes.minigame2 import MiniGame2
 
 #
 #   MAIN
@@ -31,7 +32,7 @@ def main():
                     caption="Niccleus Travels")
     director.window.pop_handlers()
 
-    director.run(MainMenu(director))
+    director.run(MiniGame2(director))
 
 
 if __name__ == '__main__':

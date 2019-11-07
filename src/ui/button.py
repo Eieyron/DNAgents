@@ -14,8 +14,11 @@
 
 import cocos
 import pyglet
+import copy
+import _thread as th
 
 # froms
+from cocos.actions import *
 from pyglet.window import key
 
 
@@ -43,7 +46,7 @@ class Button(cocos.layer.Layer):
 
     # init
 
-    def __init__(self, x, y, picDir, parent, action, toAdjust=False):
+    def __init__(self, x, y, picDir, parent, action, name=None, toAdjust=False):
         global keys, container
 
         # is_event_handler = toAdjust
@@ -54,11 +57,17 @@ class Button(cocos.layer.Layer):
         self.toAdjust = toAdjust
         self.parent = parent
         self.action = action
+        self.name = name
+
         self.highlight = False
-        self.active = True
+        self.hasLabel = False
+        self.enabled = True
+        self.hasInactiveSprite = False
+
         super().__init__()
 
         self.image = pyglet.image.load(picDir)
+        self.set_image = self.image
 
         self.spr = cocos.sprite.Sprite(self.image, position=(x,y))
         self.spr.velocity = (0,0)
@@ -75,16 +84,51 @@ class Button(cocos.layer.Layer):
         self.highlight = True
         self.image_h = pyglet.image.load(picDir)
 
-    def setInactive(self, picDir):
-        self.active = False
-        self.image_h = pyglet.image.load(picDir)
+    def setHasInactive(self, picDir):
+        self.hasInactiveSprite = True
+        self.image_i = pyglet.image.load(picDir)
+        self.disable()
 
+    def set_position(self, x, y):
+        self.spr.do(MoveTo((x,y),0))
+        
+    def shift(self, x, y): # 0.5
+        self.spr.do(MoveTo((x,y),0.5))
+
+    def work(self, pos, work): # 0.75
+        # self.set_image = img
+        origin = self.spr.position
+        work = MoveTo(pos,0.5)+CallFunc(work)+MoveTo(origin,0.25)
+
+        self.spr.do(work)
+
+        # self.shift(x, y)
+        # print(origin)
+        # self.shift(origin[0], origin[1])
+
+    def setHasLabel(self, label):
+        self.hasLabel = True
+        pos = (self.spr.position[0]+50, self.spr.position[1]-50)
+        self.label = cocos.text.Label(str((label if label != 0 else "")),font_name="Agency FB", font_size=25, anchor_x='center', anchor_y='center', position=pos)
+        # print("label enabled @",pos," with color ",self.label.element.)
+        return self
+        
+    def new_label(self, label):
+        pos = (self.spr.position[0]+50, self.spr.position[1]-50)
+        newlabel = cocos.text.Label(str((label if label != 0 else "")),font_name="Agency FB", font_size=25, anchor_x='center', anchor_y='center', position=pos)
+
+        self.label.parent.add(newlabel)
+        self.label.parent.remove(self.label)
+        self.label = newlabel
+        self.label.do(Hide())
 
     # def setVelocity(self, point):
     #     self.velocity = point
 
     # methods
     def on_mouse_motion(self, x, y, dx, dy):
+        if not self.enabled:
+            return
         if (not self.onHover) and self.spr.contains(x,y):
             self.onHover = True
             if self.highlight:
@@ -95,7 +139,9 @@ class Button(cocos.layer.Layer):
                 self.setSprite(self.image)
 
     def on_mouse_press(self, x, y, button, mod):
-        if self.onHover and self.active:
+        # print("buttin is disabled")
+        if self.onHover and self.enabled:
+            self.onHover = False
             self.action()
 
     def on_key_press(self, key, modifiers):
@@ -108,6 +154,58 @@ class Button(cocos.layer.Layer):
         if self.toAdjust:
             keys.remove(key)
 
-    def setSprite(self, img):
-        self.spr.image = img
+    def setSprite(self, img=None, imgDir=None):
+        if imgDir:
+            self.spr.image = pyglet.image.load(imgDir)
+        else:
+            self.spr.image = img
+
+    # def setSetSprite(self):
+    #     self.spr.image = self.set_image
+
+    def thread_action(self):
+        pass
+
+    # def change_sprite(self, img):
+    #     new = copy.deepcopy(self.spr)
+    #     new.image = img
+    #     self.spr = new.spr
+
+    def setSpriteandLabel(self, img, label):
+        self.setSprite(img)
+        # print(self.label.__dict__)
+        self.new_label(label)
+        # self.label.element._document._text = str(label)
+        # print(self.label.element._document._text)
+
+    def enable(self):
+
+        # print(self.name,"enabled")
+        if self.hasInactiveSprite and not self.enabled:
+            if self.onHover:
+                self.spr.image = self.image_h
+            else:
+                self.spr.image = self.image
+        self.enabled = True
+
+
+    def disable(self):
+        # print(self.name,"disabled")
+        if self.hasInactiveSprite and self.enabled:
+            self.spr.image = self.image_i
+        self.enabled = False
+
+    def hide(self):
+        self.spr.do(Hide())
+        if self.hasLabel:
+            self.label.do(Hide())
+
+    def show(self):
+        self.spr.do(Show())
+        if self.hasLabel:
+            self.label.do(Show())
+
+
+    # def start_checker(self):
+    #     while 1:
 
