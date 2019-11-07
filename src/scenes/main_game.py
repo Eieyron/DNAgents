@@ -32,30 +32,36 @@ from profiles.profile import Profile
 class MainGame(cocos.scene.Scene):
 
 # init
-    def __init__(self, director):
+    def __init__(self, director, state):
         
         self.director = director
-
-        self.bg = GameBackground('../res/main_game_backgrounds/main.png')   
+        self.state = state
+        
+        self.dna = GameBackground('../res/main_game_backgrounds/main.png')   
 
         super().__init__()
 
         self.save_dir = 'profiles/save.json'
-        self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)
+        if self.state == 'newgame':
+            self.profile = Profile()
+        else:
+            self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)
+        
+
         self.case = self.profile.information['case']
 
         self.pos = [600, 0]
 
         self.scroller = cocos.layer.ScrollingManager() 
-        self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.bg)
+        self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.dna)
 
         back_button = Button(1199, 658, '../res/back_button.png', self, self.back)
         back_button.setHasHighlight('../res/back_button_h.png')
 
-        left_button = Button(1050, 90, '../res/main_left.png', self, self.set_pos_left)
-        left_button.setHasHighlight('../res/main_left_h.png')
-        right_button = Button(1190, 90, '../res/main_right.png', self, self.set_pos_right)
-        right_button.setHasHighlight('../res/main_right_h.png')
+        left_button = Button(1050, 90, '../res/BUTTON LEFT.png', self, self.set_pos_left)
+        left_button.setHasHighlight('../res/BUTTON LEFT HIGHLIGHTED.png')
+        right_button = Button(1190, 90, '../res/BUTTON RIGHT.png', self, self.set_pos_right)
+        right_button.setHasHighlight('../res/BUTTON RIGHT HIGHLIGHTED.png')
         
         self.add(back_button, z=1)
         self.add(left_button, z=1)
@@ -65,17 +71,7 @@ class MainGame(cocos.scene.Scene):
         
         # initial view position
         self.scroller.set_focus(*self.pos)
-
-        '''
-                1280, 720
-            960, 540
-        640, 360
-        '''
-
-        # main game backgrounds
-        mbg = [x for x in range(1,12)]
-
-        
+      
 # setters/getters
 
 # methods
@@ -91,7 +87,7 @@ class MainGame(cocos.scene.Scene):
 
         self.scroller.remove(self.MGLayer)
         # instantiate new Main Game Layer
-        self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.bg)
+        self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.dna)
         self.scroller.add(self.MGLayer, z=1)
 
     def check_probs(self): # checks if all probs are done
