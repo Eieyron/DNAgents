@@ -39,6 +39,6 @@ class GameBackground(cocos.layer.ScrollableLayer):
 
 # methods
 	def set_background(self, background):
-		backgrd = '../res/main_game_backgrounds/'
+		backgrd = '../res/main_game_backgrounds/DNA '
 		self.bg.image = pyglet.image.load(backgrd + str(background) + '.png')
 		# print(backgrd)

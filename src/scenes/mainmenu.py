@@ -40,8 +40,8 @@ class MainMenu(cocos.scene.Scene):
         # excMenuItemMenuItemMenuItemept:
         #   MenuItem print("Error: unable to start thread")
            
-        menuItems.append(cocos.menu.MenuItem("Start", self.on_new_game))
-        menuItems.append(cocos.menu.MenuItem("Info", self.on_info))
+        menuItems.append(cocos.menu.MenuItem("New Game", self.on_new_game))
+        menuItems.append(cocos.menu.MenuItem("Continue", self.on_info))
         menuItems.append(cocos.menu.MenuItem("Credits", self.on_credits))
         menuItems.append(cocos.menu.MenuItem("Quit", self.on_quit))
 
@@ -56,10 +56,11 @@ class MainMenu(cocos.scene.Scene):
 
     def on_new_game(self):
         print("newgame")
-        self.director.push(MainGame(self.director))
+        self.director.push(MainGame(self.director, 'newgame'))
 
     def on_info(self):
-        print("info")
+        print("continue")
+        self.director.push(MainGame(self.director, 'continue'))
 
     def on_credits(self):
         print("credits")

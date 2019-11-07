@@ -29,12 +29,9 @@ class HelicaseBackground(cocos.layer.Layer):
 		self.base = base
 
 		self.set_bases()
-		self.left = cocos.sprite.Sprite(self.initLeft, position=(320, 360))
-		self.right = cocos.sprite.Sprite(self.initRight, position=(960, 360))
-
-		self.add(self.left)
-		self.add(self.right)
-
+		self.background = cocos.sprite.Sprite(self.initBackground, position=(640, 360))
+		
+		self.add(self.background)
 
 # setters/getters
 
@@ -43,19 +40,17 @@ class HelicaseBackground(cocos.layer.Layer):
 		self.base = base
 
 		self.set_bases()
-		self.left.image = self.initLeft
-		self.right.image = self.initRight
+		self.background.image = self.initBackground
 
 	def set_bases(self):
 		current_base = self.bases[self.base]
 
-		self.initLeft = pyglet.image.load('../res/helicase/'+ current_base +'.png')
 		if current_base == 'A':
-			self.initRight = pyglet.image.load('../res/helicase/T.png')
+			self.initBackground = pyglet.image.load('../res/helicase/block_AT.png')
 		elif current_base == 'C':
-			self.initRight = pyglet.image.load('../res/helicase/G.png')
+			self.initBackground = pyglet.image.load('../res/helicase/block_CG.png')
 		elif current_base == 'T':
-			self.initRight = pyglet.image.load('../res/helicase/A.png')
+			self.initBackground = pyglet.image.load('../res/helicase/block_TA.png')
 		else:
-			self.initRight = pyglet.image.load('../res/helicase/C.png')
+			self.initBackground = pyglet.image.load('../res/helicase/block_GC.png')
 		
