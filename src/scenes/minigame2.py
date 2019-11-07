@@ -18,6 +18,8 @@ import time
 # class imports
 from ui.button import Button
 from ui.gamebackground import GameBackground
+from cocos.actions import *
+
 # 
 #   CLASS
 # 
@@ -72,18 +74,12 @@ class MiniGame2(cocos.scene.Scene):
         self.buttons['G'] = Button(700,90,'../res/minigame2/nucleotide_g.png', self, self.put_g)
 
         self.dna = []
-        # self.dna.append(Button())
-        # init = 0
+
         for num, base in enumerate(self.bases):
-            # if init
-            # init += 1
-            # if num < self.alive_nucleotides:
+
             temp = Button(2000,2000, '../res/minigame2/nucleotide_'+base+'.png', self, self.back)
-            # print(self.bases[-init])
-            # if init < 6:
             temp.identity = base
             temp.setHasInactive('../res/minigame2/nucleotide_hide.png')
-            # init = False
             self.dna.append(temp)
 
         self.reconfigure_dna(init=True)
@@ -130,7 +126,8 @@ class MiniGame2(cocos.scene.Scene):
             else:
                 self.img_to_assign='../res/minigame2/nucleotide_primer.png'
                 # self.img_to_assign = pyglet.image.load(imgDir)
-                self.characters['primase'].work((536, 459), self.change_button_sprite)
+                self.throw_ball(self.characters['primase'].spr.get_rect().center, (536, 459), self.change_button_sprite)
+                # self.characters['primase'].work((536, 459), self.change_button_sprite)
             
 
             # time.sleep(0.5)    
@@ -175,11 +172,12 @@ class MiniGame2(cocos.scene.Scene):
         else:
 
             th.start_new_thread(self.wait_thread_reconfigure, ())
-            # time.sleep(0.5)
 
-            # self.dna[self.game_counter-1].setSprite()
-            # self.wait_thread_reconfigure(img)
-                # time.sleep(0.12)
+    def throw_ball(self, throw_position, target_position, effect):
+        ball = cocos.sprite.Sprite(pyglet.image.load('../res/minigame2/ball.png'), position=throw_position)
+        self.add(ball)
+        act = MoveTo(target_position, 0.5)+CallFunc(effect)+Hide()
+        ball.do(act)
 
     def wait_thread_reconfigure(self):
 
@@ -190,9 +188,9 @@ class MiniGame2(cocos.scene.Scene):
         maxx = self.alive_nucleotides+self.buffer
         minn = self.buffer
 
-        print('tempindex', tempindex)
-        print('maxx', maxx)
-        print('minn', minn)
+        # print('tempindex', tempindex)
+        # print('maxx', maxx)
+        # print('minn', minn)
 
         for index, nucleotide in enumerate(self.dna):
             
@@ -201,11 +199,11 @@ class MiniGame2(cocos.scene.Scene):
             if not index in range(minn, maxx+1):
                     nucleotide.disable()
                     nucleotide.shift(2000,2000)
-                    print('disabled')                                          
+                    # print('disabled')                                          
             else:
                 if not nucleotide.enabled:
                     nucleotide.enable()
-                    print('enabled')
+                    # print('enabled')
                 
                 
                 nucleotide.shift(*self.do_list[tempindex])

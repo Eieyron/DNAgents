@@ -16,6 +16,7 @@ import cocos
 import pyglet
 import copy
 import _thread as th
+import os
 
 # froms
 from cocos.actions import *
@@ -46,7 +47,7 @@ class Button(cocos.layer.Layer):
 
     # init
 
-    def __init__(self, x, y, picDir, parent, action, name=None, toAdjust=False):
+    def __init__(self, x, y, picDir, parent, action, isSpriteSheet=False, name=None, toAdjust=False):
         global keys, container
 
         # is_event_handler = toAdjust
@@ -66,9 +67,20 @@ class Button(cocos.layer.Layer):
 
         super().__init__()
 
-        self.image = pyglet.image.load(picDir)
-        self.set_image = self.image
+        img = pyglet.image.load(picDir)
+        self.image = img        
+        # frames = img.width // img.height
+        #     # print(frames)
+        # img = pyglet.image.ImageGrid(img, 1, frames, item_width=img.width, item_height=img.height)
+        # spritify = pyglet.image.Animation.from_image_sequence(img[0:], 0.25, loop=True)
 
+        if isSpriteSheet: #is not square
+            frames = img.width // img.height
+            # print(frames)
+            img = pyglet.image.ImageGrid(img, 1, frames, item_width=img.height, item_height=img.height)
+            im2 = pyglet.image.Animation.from_image_sequence(img[0:], 0.25, loop=True)
+            self.image = im2
+    
         self.spr = cocos.sprite.Sprite(self.image, position=(x,y))
         self.spr.velocity = (0,0)
 
@@ -112,7 +124,47 @@ class Button(cocos.layer.Layer):
         self.label = cocos.text.Label(str((label if label != 0 else "")),font_name="Agency FB", font_size=25, anchor_x='center', anchor_y='center', position=pos)
         # print("label enabled @",pos," with color ",self.label.element.)
         return self
+
+    def move_right_inf(self):
+        repeat_forever = Repeat(MoveBy((50, 0),0.25))
+        self.spr.do(repeat_forever)
+
+    def move_up_and_down(self):
+        repeat_forever = Repeat(MoveBy((0, 12),0.75)+MoveBy((0, -12),0.75))
+        self.spr.do(repeat_forever)
+
+    def finish_moving(self):
+        repeat_forever = Repeat(MoveBy((-200, 0),0.5))
+        self.spr.do(repeat_forever)
+
+    def deploy(self, target):
+        self.target = target
+        # move = Show()+MoveTo((970,83),0.75)+Repeat(MoveBy((50, 0),0.25))
+        move = Show()+MoveTo((970,83),0.75)+CallFunc(self.deploy_if_hit_target)
+        self.spr.do(move)
+
+    def deploy_if_hit_target(self):
+
+        if self.spr.get_rect().intersects(self.target.spr.get_rect()):
+            self.target.spr.do(Show())
+            print('success')
+            self.target_hit_action()
+        else:
+            # self.target.spr.do(Show())
+            # self.spr.do(Hide())
+            print('failed')
+            self.target_miss_action()
         
+        self.spr.do(Hide())
+
+    def target_hit_action(self):
+        pass
+
+    def target_miss_action(self):
+        pass
+            # return
+        # print('failed')
+
     def new_label(self, label):
         pos = (self.spr.position[0]+50, self.spr.position[1]-50)
         newlabel = cocos.text.Label(str((label if label != 0 else "")),font_name="Agency FB", font_size=25, anchor_x='center', anchor_y='center', position=pos)
@@ -143,6 +195,9 @@ class Button(cocos.layer.Layer):
         if self.onHover and self.enabled:
             self.onHover = False
             self.action()
+
+    def on_mouse_release(self, x, y, button, mod):
+        pass
 
     def on_key_press(self, key, modifiers):
         global keys
