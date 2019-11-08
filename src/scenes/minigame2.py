@@ -59,8 +59,8 @@ class MiniGame2(cocos.scene.Scene):
         self.alive_nucleotides = 5
         self.buffer = 0
 
-        self.buttons['back'] = Button(53,666, '../res/main_left.png', self, self.back)
-        self.buttons['back'].setHasHighlight('../res/main_left_h.png')
+        self.buttons['back'] = Button(78,666, '../res/back_button.png', self, self.back, toAdjust=True)
+        self.buttons['back'].setHasHighlight('../res/back_button_h.png')
 
         self.characters = {}
         self.characters['primase'] = Button(64,75, '../res/minigame2/primase_smol.png', self, self.back)
@@ -68,10 +68,10 @@ class MiniGame2(cocos.scene.Scene):
 
 
         self.popup_anchor = (640,360)
-        self.buttons['A'] = Button(520,90,'../res/minigame2/nucleotide_a.png', self, self.put_a)
-        self.buttons['T'] = Button(580,90,'../res/minigame2/nucleotide_t.png', self, self.put_t)
-        self.buttons['C'] = Button(640,90,'../res/minigame2/nucleotide_c.png', self, self.put_c)
-        self.buttons['G'] = Button(700,90,'../res/minigame2/nucleotide_g.png', self, self.put_g)
+        self.buttons['A'] = Button(476,90,'../res/minigame2/buttons/a.png', self, self.put_a)
+        self.buttons['T'] = Button(576,90,'../res/minigame2/buttons/t.png', self, self.put_t)
+        self.buttons['C'] = Button(676,90,'../res/minigame2/buttons/c.png', self, self.put_c)
+        self.buttons['G'] = Button(776,90,'../res/minigame2/buttons/g.png', self, self.put_g)
 
         self.dna = []
 
