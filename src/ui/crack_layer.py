@@ -42,7 +42,7 @@ class CrackLayer(cocos.layer.Layer):
 		self.crack_count = crack_count
 
 		#print('crack')
-		init = pyglet.image.load('../res/helicase/crack.png')
+		init = pyglet.image.load('../res/helicase/punch.png')
 		if self.crack_count == 0:
 			self.crack1 = cocos.sprite.Sprite(init, position=(self.x_pos, self.y_pos))
 			self.add(self.crack1)
