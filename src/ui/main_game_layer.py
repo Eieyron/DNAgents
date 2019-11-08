@@ -41,7 +41,7 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
         self.scene = scene
         self.case = case
         self.profile = profile
-        self.background = GameBackground('../res/main_game_backgrounds/background.png')
+        self.background = GameBackground('../res/main_game_backgrounds/main.png')
         self.scroller.add(self.background, 0)
         self.scroller.add(self.dna, 0)
 

@@ -34,7 +34,7 @@ class HelicaseMinigame(cocos.scene.Scene):
 
 		self.director = director
 
-		self.bases = ['A', 'C', 'T' ,'G']
+		self.bases = ['A', 'C', 'T' ,'G', 'A']
 		self.base = 0
 		self.crack_layer = CrackLayer(2000, 2000)
 		self.count = 0
@@ -80,8 +80,8 @@ class HelicaseMinigame(cocos.scene.Scene):
 				self.count = 0
 				self.base += 1
 				#print(self.base)
-				self.crack_buttons()
 				self.fix_background()
+				self.crack_buttons()
 		else:
 			print('DOOOOONNNNEEE')
 			self.director.pop()
@@ -89,9 +89,11 @@ class HelicaseMinigame(cocos.scene.Scene):
 	def fix_background(self):
 		self.crack_layer.remove_cracks()
 		self.background.set_background(self.base)
+		
 
 	def make_crack(self):
 		self.crack_layer.add_crack(self.x_pos, self.y_pos, self.count)
+		#######################################
 		self.count += 1
 		self.crack_flag = False
 		self.remove(self.crack_button)
