@@ -66,6 +66,7 @@ class Button(cocos.layer.Layer):
         self.hasLabel = False
         self.enabled = True
         self.hasInactiveSprite = False
+        self.hasClickedSprite = False
 
         super().__init__()
 
@@ -103,11 +104,18 @@ class Button(cocos.layer.Layer):
         self.image_i = pyglet.image.load(picDir)
         self.disable()
 
+    def setHasClicked(self, picDir):
+        self.hasClickedSprite = True 
+        self.image_c = pyglet.image.load(picDir)
+
     def set_position(self, x, y):
         self.spr.do(MoveTo((x,y),0))
         
     def shift(self, x, y): # 0.5
         self.spr.do(MoveTo((x,y),0.5))
+
+    def shift_then_show(self, x, y): # 0.5
+        self.spr.do(Hide()+MoveTo((x,y),0.5)+Show())
 
     def work(self, pos, work): # 0.75
         # self.set_image = img
@@ -144,6 +152,20 @@ class Button(cocos.layer.Layer):
         # move = Show()+MoveTo((970,83),0.75)+Repeat(MoveBy((50, 0),0.25))
         move = Show()+MoveTo((970,83),0.75)+CallFunc(self.deploy_if_hit_target)
         self.spr.do(move)
+
+    def clicked(self):
+        self.spr.do(CallFunc(self.change_sprite_when_clicked))
+
+    def change_sprite_when_clicked(self):
+        self.spr.image = self.image_c
+        # time.sleep(0.2)
+        # self.spr.image = self.image
+
+    def click_sprite(self):
+        self.spr.image = self.image_c
+
+    def release_sprite(self):
+        self.spr.image = self.image
 
     # def push_button(self, button):
 
@@ -196,16 +218,21 @@ class Button(cocos.layer.Layer):
     def on_mouse_press(self, x, y, button, mod):
         # print("buttin is disabled")
         if self.onHover and self.enabled:
-            self.onHover = False
+            # self.onHover = False
             self.action()
+            if self.hasClickedSprite:
+                self.click_sprite()
+
 
     def on_mouse_release(self, x, y, button, mod):
-        pass
+        if self.hasClickedSprite:
+            self.release_sprite()
 
     def on_key_press(self, key, modifiers):
         global keys
         if self.toAdjust:
             keys.add(key)
+
 
     def on_key_release(self, key, modifiers):
         global keys

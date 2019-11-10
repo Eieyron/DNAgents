@@ -34,7 +34,7 @@ def main():
                     caption="DNAgents")
     director.window.pop_handlers()
 
-    director.run(MainMenu(director))
+    director.run(MiniGame2(director))
 
 
 if __name__ == '__main__':

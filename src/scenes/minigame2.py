@@ -59,7 +59,7 @@ class MiniGame2(cocos.scene.Scene):
         self.alive_nucleotides = 5
         self.buffer = 0
 
-        self.buttons['back'] = Button(78,666, '../res/back_button.png', self, self.back, toAdjust=True)
+        self.buttons['back'] = Button(78,666, '../res/back_button.png', self, self.back)
         self.buttons['back'].setHasHighlight('../res/back_button_h.png')
 
         self.characters = {}
@@ -69,9 +69,13 @@ class MiniGame2(cocos.scene.Scene):
 
         self.popup_anchor = (640,360)
         self.buttons['A'] = Button(476,90,'../res/minigame2/buttons/a.png', self, self.put_a)
+        self.buttons['A'].setHasClicked('../res/minigame2/buttons/a_p.png')
         self.buttons['T'] = Button(576,90,'../res/minigame2/buttons/t.png', self, self.put_t)
+        self.buttons['T'].setHasClicked('../res/minigame2/buttons/t_p.png')
         self.buttons['C'] = Button(676,90,'../res/minigame2/buttons/c.png', self, self.put_c)
+        self.buttons['C'].setHasClicked('../res/minigame2/buttons/c_p.png')
         self.buttons['G'] = Button(776,90,'../res/minigame2/buttons/g.png', self, self.put_g)
+        self.buttons['G'].setHasClicked('../res/minigame2/buttons/g_p.png')
 
         self.dna = []
 
@@ -205,8 +209,10 @@ class MiniGame2(cocos.scene.Scene):
                     nucleotide.enable()
                     # print('enabled')
                 
-                
-                nucleotide.shift(*self.do_list[tempindex])
+                if nucleotide.spr.position == (2000,2000):
+                    nucleotide.shift_then_show(*self.do_list[tempindex])                    
+                else:
+                    nucleotide.shift(*self.do_list[tempindex])
                 
                 tempindex -= 1
 
