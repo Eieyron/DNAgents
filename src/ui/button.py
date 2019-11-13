@@ -60,10 +60,13 @@ class Button(cocos.layer.Layer):
         self.action = action
         self.name = name
 
+        self.origin_position = (x,y)
+
         self.highlight = False
         self.hasLabel = False
         self.enabled = True
         self.hasInactiveSprite = False
+        self.hasClickedSprite = False
 
         super().__init__()
 
@@ -101,16 +104,23 @@ class Button(cocos.layer.Layer):
         self.image_i = pyglet.image.load(picDir)
         self.disable()
 
+    def setHasClicked(self, picDir):
+        self.hasClickedSprite = True 
+        self.image_c = pyglet.image.load(picDir)
+
     def set_position(self, x, y):
         self.spr.do(MoveTo((x,y),0))
         
     def shift(self, x, y): # 0.5
         self.spr.do(MoveTo((x,y),0.5))
 
+    def shift_then_show(self, x, y): # 0.5
+        self.spr.do(Hide()+MoveTo((x,y),0.5)+Show())
+
     def work(self, pos, work): # 0.75
         # self.set_image = img
-        origin = self.spr.position
-        work = MoveTo(pos,0.5)+CallFunc(work)+MoveTo(origin,0.25)
+        # origin = self.spr.position
+        work = MoveTo(pos,0.5)+CallFunc(work)+MoveTo(self.origin_position,0.25)
 
         self.spr.do(work)
 
@@ -143,15 +153,30 @@ class Button(cocos.layer.Layer):
         move = Show()+MoveTo((970,83),0.75)+CallFunc(self.deploy_if_hit_target)
         self.spr.do(move)
 
+    def clicked(self):
+        self.spr.do(CallFunc(self.change_sprite_when_clicked))
+
+    def change_sprite_when_clicked(self):
+        self.spr.image = self.image_c
+        # time.sleep(0.2)
+        # self.spr.image = self.image
+
+    def click_sprite(self):
+        self.spr.image = self.image_c
+
+    def release_sprite(self):
+        self.spr.image = self.image
+
+    # def push_button(self, button):
+
     def deploy_if_hit_target(self):
 
         if self.spr.get_rect().intersects(self.target.spr.get_rect()):
             self.target.spr.do(Show())
             print('success')
             self.target_hit_action()
+
         else:
-            # self.target.spr.do(Show())
-            # self.spr.do(Hide())
             print('failed')
             self.target_miss_action()
         
@@ -193,16 +218,21 @@ class Button(cocos.layer.Layer):
     def on_mouse_press(self, x, y, button, mod):
         # print("buttin is disabled")
         if self.onHover and self.enabled:
-            self.onHover = False
+            # self.onHover = False
             self.action()
+            if self.hasClickedSprite:
+                self.click_sprite()
+
 
     def on_mouse_release(self, x, y, button, mod):
-        pass
+        if self.hasClickedSprite:
+            self.release_sprite()
 
     def on_key_press(self, key, modifiers):
         global keys
         if self.toAdjust:
             keys.add(key)
+
 
     def on_key_release(self, key, modifiers):
         global keys
