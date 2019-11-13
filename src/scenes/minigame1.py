@@ -31,7 +31,7 @@ from cocos.actions import *
 class MiniGame1(cocos.scene.Scene):
 
 # init
-    def __init__(self, director, mainGameLayer, victory_action, fail_action):
+    def __init__(self, director, mainGameLayer, victory_action, fail_action, strand=None):
         
         self.director = director
         self.mainGameLayer = mainGameLayer
@@ -60,7 +60,16 @@ class MiniGame1(cocos.scene.Scene):
         self.finish_button = Button(811,255, '../res/minigame1/finish_level_button.png', self, self.finish_level)
         self.finish_button.disable()
 
-        self.strand = list('a') # defines the left strand
+        # if strand == None:
+        #     self.strand = list('a') # defines the left strand
+        # else:
+        #     self.strand = strand
+
+        self.strand = [ 'a' if x == 0 else 
+                        't' if x == 1 else
+                        'c' if x == 2 else
+                        'g' if x == 3 else
+                        'b' for x in [random.randrange(0,4) for i in range(0,20)]]
         self.strand.reverse()
         self.counter_strand = [ 'a' if x == 't' else 
                                 't' if x == 'a' else

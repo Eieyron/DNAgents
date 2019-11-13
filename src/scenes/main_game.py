@@ -15,6 +15,7 @@ import pyglet
 import _thread as th
 import time
 import os
+import random
 
 # class imports
 from ui.button import Button
@@ -48,6 +49,25 @@ class MainGame(cocos.scene.Scene):
         else:
             self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)
 
+        # self.dna_sequence = [  'a' if x == 0 else 
+        #                     't' if x == 1 else
+        #                     'c' if x == 2 else
+        #                     'g' if x == 3 else
+        #                     'b' for x in [random.randrange(0,4) for i in range(0,60)]]
+        # self.counter_sequence = ['a' if x == 't' else 
+        #                     't' if x == 'a' else
+        #                     'c' if x == 'g' else
+        #                     'g' if x == 'c' else
+        #                     'b' for x in self.dna_sequence]
+
+        # # print(self.dna_sequence)
+
+        # self.dna_segments = [self.dna_sequence[0:20], self.dna_sequence[20:40], self.dna_sequence[40:60]]
+        # self.counter_segments = [self.counter_sequence[0:20], self.counter_sequence[20:40], self.counter_sequence[40:60]]
+
+        # self.dna_sequence2 = self.dna_sequence[20:40]
+        # self.dna_sequence3 = self.dna_sequence[40:60]
+
         self.case = self.profile.information['case']
 
         self.pos = [600, 0]
@@ -70,7 +90,7 @@ class MainGame(cocos.scene.Scene):
         self.add(back_button, z=1)
         self.add(left_button, z=1)
         self.add(right_button, z=1)
-        self.add(self.lives, z=10)
+        self.add(self.lives, z=1)
         self.scroller.add(self.MGLayer, z=0)
         self.add(self.scroller, z=0)
         

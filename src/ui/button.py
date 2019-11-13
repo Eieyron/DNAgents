@@ -91,7 +91,7 @@ class Button(cocos.layer.Layer):
 
         self.onHover = False
 
-        self.add(self.spr)
+        self.add(self.spr, 1)
 
         if toAdjust:
             self.spr.do(KeyMove())
@@ -122,10 +122,10 @@ class Button(cocos.layer.Layer):
     def setHasProjection(self, picDir, position=(640,360)):
         self.hasProjection = True
         pos = self.spr.position
-        pos = (pos[0], pos[1]+216)
+        pos = (pos[0]-15, pos[1]+216)
         self.project_sprite = cocos.sprite.Sprite(pyglet.image.load(picDir), position=pos)
         self.project_sprite.do(Hide())
-        self.add(self.project_sprite)
+        self.add(self.project_sprite, 0)
 
     # button movement methods
     def set_position(self, x, y):

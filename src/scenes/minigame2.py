@@ -14,6 +14,8 @@ import cocos
 import pyglet
 import _thread as th
 import time
+import random
+
 
 # class imports
 from ui.button import Button
@@ -43,7 +45,12 @@ class MiniGame2(cocos.scene.Scene):
 
         self.buttons = {}
 
-        self.bases = 'atcggatcgga'
+        self.bases = [  'a' if x == 0 else 
+                        't' if x == 1 else
+                        'c' if x == 2 else
+                        'g' if x == 3 else
+                        'b' for x in [random.randrange(0,4) for i in range(0,20)]]
+
         self.do_list = [(34, 348),
                         (106, 307),
                         (224, 295),

@@ -58,7 +58,12 @@ class MiniGame3(cocos.scene.Scene):
         self.buttons['back'] = Button(53,666, '../res/main_left.png', self, self.back)
         self.buttons['back'].setHasHighlight('../res/main_left_h.png')
 
-        self.strand = 'atcgatcgaatcgatcgaatcgatcgaatcgatcga'
+        self.strand = [ 'a' if x == 0 else 
+                        't' if x == 1 else
+                        'c' if x == 2 else
+                        'g' if x == 3 else
+                        'b' for x in [random.randrange(0,4) for i in range(0,20)]]
+
         # self.land_blocks = {}
         self.dna = []
         anchor = [0,0]

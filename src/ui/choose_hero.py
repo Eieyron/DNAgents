@@ -38,7 +38,7 @@ class Choose_Hero(cocos.layer.ColorLayer):
 
     # init
 
-    def __init__(self,  parent, action, to_select, width=1280, height=720):
+    def __init__(self,  parent, action, to_select,bgnum=1, width=1280, height=720):
         self.parent = parent
         self.action = action
 
@@ -49,7 +49,7 @@ class Choose_Hero(cocos.layer.ColorLayer):
         self.to_select = set(to_select)
         self.selected = set()
 
-        self.bg_img = pyglet.image.load('../res/choose_hero/platform.png')
+        self.bg_img = pyglet.image.load('../res/choose_hero/platform.png' if bgnum == 1 else '../res/choose_hero/platform_2.png')
         self.bg = cocos.sprite.Sprite(self.bg_img, position=(640,360))
         # self.arm_sprite = cocos.sprite.Sprite(self.ua, position=(640,360))
 
