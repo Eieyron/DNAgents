@@ -38,32 +38,32 @@ class Choose_Hero(cocos.layer.ColorLayer):
 
     # init
 
-    def __init__(self,  parent, action, width=1280, height=720):
+    def __init__(self,  parent, action, to_select, width=1280, height=720):
         self.parent = parent
         self.action = action
-        self.to_select = []
 
         super().__init__(30, 48, 130, 0, width=width, height=height)
 
         # self.ua = pyglet.image.load('../res/minigame1/upright_arms.png')
         # self.sa = pyglet.image.load('../res/minigame1/smash_arms.png')
+        self.to_select = set(to_select)
+        self.selected = set()
 
         self.bg_img = pyglet.image.load('../res/choose_hero/platform.png')
         self.bg = cocos.sprite.Sprite(self.bg_img, position=(640,360))
-        self.selected = []
         # self.arm_sprite = cocos.sprite.Sprite(self.ua, position=(640,360))
 
         self.buttons = {}
-        self.buttons['helicase'] = Button(295,125, '../res/choose_hero/helicase.png', self, self.helicase_clicked)
+        self.buttons['helicase'] = Button(287, 221, '../res/choose_hero/helicase.png', self, self.helicase_clicked)
         self.buttons['helicase'].setHasProjection('../res/choose_hero/helicase_holo.png')
 
-        self.buttons['primase'] = Button(525,125, '../res/choose_hero/primase.png', self, self.primase_clicked)
+        self.buttons['primase'] = Button(529,221, '../res/choose_hero/primase.png', self, self.primase_clicked)
         self.buttons['primase'].setHasProjection('../res/choose_hero/primase_holo.png')
         
-        self.buttons['polymerase'] = Button(755,125, '../res/choose_hero/polymerase.png', self, self.polymerase_clicked)
+        self.buttons['polymerase'] = Button(771,221, '../res/choose_hero/polymerase.png', self, self.polymerase_clicked)
         self.buttons['polymerase'].setHasProjection('../res/choose_hero/polymerase_holo.png')
 
-        self.buttons['ligase'] = Button(985,125, '../res/choose_hero/ligase.png', self, self.ligase_clicked,)
+        self.buttons['ligase'] = Button(1013,221, '../res/choose_hero/ligase.png', self, self.ligase_clicked,)
         self.buttons['ligase'].setHasProjection('../res/choose_hero/ligase_holo.png')
 
 
@@ -95,22 +95,26 @@ class Choose_Hero(cocos.layer.ColorLayer):
         # self.arm_sprite.image = self.ua
 
     def set_heroes_to_select(self, hero_list):
-        self.to_select = hero_list
+        self.to_select = set(hero_list)
 
     def helicase_clicked(self):
-        self.selected.append(0)
+        print('helicase clicked')
+        self.selected.add(0)
         self.evaluate_clicked()
 
     def primase_clicked(self):
-        self.selected.append(1)
+        print('primase clicked')
+        self.selected.add(1)
         self.evaluate_clicked()
 
     def polymerase_clicked(self):
-        self.selected.append(2)
+        print('poly clicked')
+        self.selected.add(2)
         self.evaluate_clicked()
 
     def ligase_clicked(self):
-        self.selected.append(3)
+        print('ligase clicked')
+        self.selected.add(3)
         self.evaluate_clicked()
 
     def evaluate_clicked(self):
@@ -119,17 +123,29 @@ class Choose_Hero(cocos.layer.ColorLayer):
         print('self.to_select',self.to_select)
         print('self.selected',self.selected)
 
-        if not len(self.to_select) == len(self.selected):
+        # print([x in self.to_select for x in self.selected])
+
+        if not all( [x in self.to_select for x in self.selected]):
+            self.hide()
+            print('failed')
+            self.selected = set()
+            self.parent.subtract_life()
             return
 
-        elif set(self.to_select) == set(self.selected):
+        if not len(self.to_select) == len(self.selected):
+            # self.parent
+            return
+
+        elif self.to_select == self.selected:
 
             self.action()
-            self.to_select = []
-            self.selected = []
+            self.to_select = set()
+            self.selected = set()
             self.hide()
+            print('success')
 
         else:
+            # self.parent.subtract_life()
             return
 
     def hide(self):

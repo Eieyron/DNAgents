@@ -30,11 +30,12 @@ from cocos.actions import *
 class MiniGame3(cocos.scene.Scene):
 
 # init
-    def __init__(self, director, mainGameLayer, victory_action):
+    def __init__(self, director, mainGameLayer, victory_action, fail_action):
         
         self.director = director
         self.mainGameLayer = mainGameLayer
         self.victory_action = victory_action
+        self.fail_action = fail_action
 
         super().__init__()
 
@@ -194,7 +195,7 @@ class MiniGame3(cocos.scene.Scene):
             if self.objects_hit == self.num_to_random:
                 self.characters['squirrelboi'].finish_moving(self.victory_action)
             if self.missed > 0:
-                self.back()
+                self.fail_action()
 
     def hit_object(self):
         self.objects_hit += 1

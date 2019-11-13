@@ -31,11 +31,12 @@ from cocos.actions import *
 class MiniGame1(cocos.scene.Scene):
 
 # init
-    def __init__(self, director, mainGameLayer, victory_action):
+    def __init__(self, director, mainGameLayer, victory_action, fail_action):
         
         self.director = director
         self.mainGameLayer = mainGameLayer
         self.victory_action = victory_action
+        self.fail_action = fail_action
 
         super().__init__()
 
@@ -114,6 +115,10 @@ class MiniGame1(cocos.scene.Scene):
         print("finished_level")
         self.victory_action()
 
+    def fail_level(self):
+        # self.dire
+
+        self.fail_action()
 
     def generate_target(self):
 

@@ -29,11 +29,12 @@ from cocos.actions import *
 class MiniGame2(cocos.scene.Scene):
 
 # init
-    def __init__(self, director, mainGameLayer, victory_action):
+    def __init__(self, director, mainGameLayer, victory_action, fail_action):
         
         self.director = director
         self.mainGameLayer = mainGameLayer
         self.victory_action = victory_action
+        self.fail_action = fail_action
 
         super().__init__()
 
@@ -168,7 +169,7 @@ class MiniGame2(cocos.scene.Scene):
         try:
             self.button_to_assign.spr.image = pyglet.image.load(self.img_to_assign)
         except Exception as e:
-            self.back()
+            self.fail_action()
 
     def reconfigure_dna(self, init=False):
 
