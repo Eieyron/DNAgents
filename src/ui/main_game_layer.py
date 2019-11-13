@@ -20,6 +20,7 @@ from ui.button import Button
 from ui.gamebackground import GameBackground
 from ui.pin_button import PinButton
 from ui.hero_layer import HeroLayer
+from ui.choose_hero import Choose_Hero
 from scenes.helicase_minigame import HelicaseMinigame
 from scenes.minigame1 import MiniGame1
 from scenes.minigame2 import MiniGame2
@@ -50,8 +51,12 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
         self.minigame_completed = False
 
         self.background = GameBackground('../res/main_game_backgrounds/background.png')
+
+        self.ch_layer = Choose_Hero(self, self.go_to_minigame)
+
         self.scroller.add(self.background, 0)
         self.scroller.add(self.dna, 0)
+        self.scene.add(self.ch_layer,4)
 
         #self.add_pin_test(1000, 360)
         
@@ -68,6 +73,7 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
         if case == 1:
             self.problem['1'] = PinButton(157, 424, '../res/pin.png', 'helicase', self, self.profile, 0, self.choose_hero)
             self.dna.set_background(1)
+            self.ch_layer.set_heroes_to_select([0])
         elif case == 2:
             self.problem['1'] = PinButton(414, 481, '../res/pin.png', 'pripoly', self, self.profile, 0, self.choose_hero) if not self.profile.information['problems'][0] else None
             self.problem['2'] = PinButton(46, 257, '../res/pin.png', 'pripoly', self, self.profile, 1, self.choose_hero) if not self.profile.information['problems'][1] else None
@@ -77,9 +83,11 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
                 self.dna.set_background(4)
             else:
                 self.dna.set_background(2)
+            self.ch_layer.set_heroes_to_select([1,2])
         elif case == 3:
             self.problem['1'] = PinButton(538, 427, '../res/pin.png', 'helicase', self, self.profile, 0, self.choose_hero)
             self.dna.set_background(5)    
+            self.ch_layer.set_heroes_to_select([0])
         elif case == 4:
             self.problem['1'] = PinButton(573, 321, '../res/pin.png', 'pripoly', self, self.profile, 0, self.choose_hero) if not self.profile.information['problems'][0] else None
             self.problem['2'] = PinButton(1029, 461, '../res/pin.png', 'pripoly', self, self.profile, 1, self.choose_hero) if not self.profile.information['problems'][1] else None
@@ -89,6 +97,7 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
                 self.dna.set_background(8)
             else:
                 self.dna.set_background(6)
+            self.ch_layer.set_heroes_to_select([1,2])
         elif case == 5:
             self.problem['1'] = PinButton(1167, 427, '../res/pin.png', 'helicase', self, self.profile, 0, self.choose_hero)
             self.dna.set_background(9)
@@ -101,6 +110,7 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
                 self.dna.set_background(12)
             else:
                 self.dna.set_background(10)
+            self.ch_layer.set_heroes_to_select([1,2])
         elif case == 7:
             self.problem['1'] = PinButton(85, 225, '../res/pin.png', 'ligase', self, self.profile, 0, self.choose_hero) if not self.profile.information['problems'][0] else None
             self.problem['2'] = PinButton(79, 568, '../res/pin.png', 'ligase', self, self.profile, 1, self.choose_hero) if not self.profile.information['problems'][1] else None
@@ -110,6 +120,7 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
                 self.dna.set_background(15)
             else:
                 self.dna.set_background(13)
+            self.ch_layer.set_heroes_to_select([3])
         else:
             self.dna.set_background(16)
         
@@ -143,8 +154,8 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
                 #print('pin doesnt exist')
 
 
-
-        self.go_to_minigame()
+        self.ch_layer.show()
+        # self.go_to_minigame()
 
     def go_to_minigame(self):
         #print(self.profile.information['minigame']) 

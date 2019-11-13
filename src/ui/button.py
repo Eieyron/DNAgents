@@ -68,6 +68,7 @@ class Button(cocos.layer.Layer):
         self.enabled = True
         self.hasInactiveSprite = False
         self.hasClickedSprite = False
+        self.hasProjection = False
 
         super().__init__()
 
@@ -96,6 +97,8 @@ class Button(cocos.layer.Layer):
             self.spr.do(KeyMove())
 
     # setters/getters
+
+    # general button methods
     def setHasHighlight(self, picDir):
         self.highlight = True
         self.image_h = pyglet.image.load(picDir)
@@ -109,6 +112,22 @@ class Button(cocos.layer.Layer):
         self.hasClickedSprite = True 
         self.image_c = pyglet.image.load(picDir)
 
+    def setHasLabel(self, label):
+        self.hasLabel = True
+        pos = (self.spr.position[0]+50, self.spr.position[1]-50)
+        self.label = cocos.text.Label(str((label if label != 0 else "")),font_name="Agency FB", font_size=25, anchor_x='center', anchor_y='center', position=pos)
+        # print("label enabled @",pos," with color ",self.label.element.)
+        return self
+
+    def setHasProjection(self, picDir, position=(640,360)):
+        self.hasProjection = True
+        pos = self.spr.position
+        pos = (pos[0], pos[1]+216)
+        self.project_sprite = cocos.sprite.Sprite(pyglet.image.load(picDir), position=pos)
+        self.project_sprite.do(Hide())
+        self.add(self.project_sprite)
+
+    # button movement methods
     def set_position(self, x, y):
         self.spr.do(MoveTo((x,y),0))
         
@@ -124,17 +143,6 @@ class Button(cocos.layer.Layer):
         work = MoveTo(pos,0.5)+CallFunc(work)+MoveTo(self.origin_position,0.25)+CallFunc(extra_work)
 
         self.spr.do(work)
-
-        # self.shift(x, y)
-        # print(origin)
-        # self.shift(origin[0], origin[1])
-
-    def setHasLabel(self, label):
-        self.hasLabel = True
-        pos = (self.spr.position[0]+50, self.spr.position[1]-50)
-        self.label = cocos.text.Label(str((label if label != 0 else "")),font_name="Agency FB", font_size=25, anchor_x='center', anchor_y='center', position=pos)
-        # print("label enabled @",pos," with color ",self.label.element.)
-        return self
 
     def move_right_inf(self):
         repeat_forever = Repeat(MoveBy((50, 0),0.25))
@@ -159,8 +167,6 @@ class Button(cocos.layer.Layer):
 
     def change_sprite_when_clicked(self):
         self.spr.image = self.image_c
-        # time.sleep(0.2)
-        # self.spr.image = self.image
 
     def click_sprite(self):
         self.spr.image = self.image_c
@@ -211,10 +217,16 @@ class Button(cocos.layer.Layer):
             self.onHover = True
             if self.highlight:
                 self.setSprite(self.image_h)
+            if self.hasProjection:
+                self.project_sprite.do(Show())
+
         elif self.onHover and (not self.spr.contains(x,y)):
             self.onHover = False
             if self.highlight:
                 self.setSprite(self.image)
+            if self.hasProjection:
+                self.project_sprite.do(Hide())
+
 
     def on_mouse_press(self, x, y, button, mod):
         # print("buttin is disabled")
