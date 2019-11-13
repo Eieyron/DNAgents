@@ -41,7 +41,7 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
         self.scene = scene
         self.case = case
         self.profile = profile
-        self.background = GameBackground('../res/main_game_backgrounds/main.png')
+        self.background = GameBackground('../res/main_game_backgrounds/background.png')
         self.scroller.add(self.background, 0)
         self.scroller.add(self.dna, 0)
 
@@ -155,11 +155,11 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
         if i == 1:
             self.pin_button1 = pin_button
             self.pin_button1.setHasHighlight('../res/pin_h.png')        
-            self.scroller.add(self.pin_button1, 0)
+            self.scroller.add(self.pin_button1, 1)
         elif i == 2:
             self.pin_button2 = pin_button
             self.pin_button2.setHasHighlight('../res/pin_h.png')        
-            self.scroller.add(self.pin_button2, 0)
+            self.scroller.add(self.pin_button2, 1)
 
         # self.hero_popup = HeroLayer(self.scroller, self.pin_button.spr)
         # self.scene.add(self.hero_popup, z=2)
@@ -168,4 +168,4 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
         pin_button = PinButton(x, y, '../res/pin.png', 'wew', self, self.profile, 0, self.choose_hero, True)
         pin_button.setHasHighlight('../res/pin_h.png')        
         
-        self.scroller.add(pin_button, 0)
+        self.scroller.add(pin_button, 1)

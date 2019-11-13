@@ -38,6 +38,7 @@ class MainGame(cocos.scene.Scene):
         self.state = state
         
         self.dna = GameBackground('../res/main_game_backgrounds/main.png')   
+        # self.bg = GameBackground('../res/main_game_backgrounds/background.png')   
 
         super().__init__()
 
@@ -66,7 +67,7 @@ class MainGame(cocos.scene.Scene):
         self.add(back_button, z=1)
         self.add(left_button, z=1)
         self.add(right_button, z=1)
-        self.scroller.add(self.MGLayer, z=1)
+        self.scroller.add(self.MGLayer, z=0)
         self.add(self.scroller, z=0)
         
         # initial view position
