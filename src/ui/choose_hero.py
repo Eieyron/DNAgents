@@ -57,14 +57,16 @@ class Choose_Hero(cocos.layer.ColorLayer):
         self.buttons['helicase'] = Button(295,125, '../res/choose_hero/helicase.png', self, self.helicase_clicked)
         self.buttons['helicase'].setHasProjection('../res/choose_hero/helicase_holo.png')
 
-        self.buttons['ligase'] = Button(525,125, '../res/choose_hero/ligase.png', self, self.ligase_clicked,)
-        self.buttons['ligase'].setHasProjection('../res/choose_hero/ligase_holo.png')
-
+        self.buttons['primase'] = Button(525,125, '../res/choose_hero/primase.png', self, self.primase_clicked)
+        self.buttons['primase'].setHasProjection('../res/choose_hero/primase_holo.png')
+        
         self.buttons['polymerase'] = Button(755,125, '../res/choose_hero/polymerase.png', self, self.polymerase_clicked)
         self.buttons['polymerase'].setHasProjection('../res/choose_hero/polymerase_holo.png')
 
-        self.buttons['primase'] = Button(985,125, '../res/choose_hero/primase.png', self, self.primase_clicked)
-        self.buttons['primase'].setHasProjection('../res/choose_hero/primase_holo.png')
+        self.buttons['ligase'] = Button(985,125, '../res/choose_hero/ligase.png', self, self.ligase_clicked,)
+        self.buttons['ligase'].setHasProjection('../res/choose_hero/ligase_holo.png')
+
+
         
         for button in self.buttons.values():
             self.add(button, 1)
@@ -112,14 +114,20 @@ class Choose_Hero(cocos.layer.ColorLayer):
         self.evaluate_clicked()
 
     def evaluate_clicked(self):
+        print('evaliating')
+
+        print('self.to_select',self.to_select)
+        print('self.selected',self.selected)
 
         if not len(self.to_select) == len(self.selected):
             return
 
-        elif [x == y for x in self.to_select for y in self.selected].all():
+        elif set(self.to_select) == set(self.selected):
 
             self.action()
             self.to_select = []
+            self.selected = []
+            self.hide()
 
         else:
             return

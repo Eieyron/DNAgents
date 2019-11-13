@@ -101,6 +101,7 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
         elif case == 5:
             self.problem['1'] = PinButton(1167, 427, '../res/pin.png', 'helicase', self, self.profile, 0, self.choose_hero)
             self.dna.set_background(9)
+            self.ch_layer.set_heroes_to_select([0])
         elif case == 6:
             self.problem['1'] = PinButton(1575, 521, '../res/pin.png', 'pripoly', self, self.profile, 0, self.choose_hero) if not self.profile.information['problems'][0] else None
             self.problem['2'] = PinButton(1132, 328, '../res/pin.png', 'pripoly', self, self.profile, 1, self.choose_hero) if not self.profile.information['problems'][1] else None
