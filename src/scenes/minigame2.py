@@ -29,9 +29,11 @@ from cocos.actions import *
 class MiniGame2(cocos.scene.Scene):
 
 # init
-    def __init__(self, director):
+    def __init__(self, director, mainGameLayer, victory_action):
         
         self.director = director
+        self.mainGameLayer = mainGameLayer
+        self.victory_action = victory_action
 
         super().__init__()
 
@@ -40,7 +42,7 @@ class MiniGame2(cocos.scene.Scene):
 
         self.buttons = {}
 
-        self.bases = 'atcggatcggatcggatcggatcggatcggatcggatcggatcggatcggatcggatcggatcggatcggatcggatcggatcggatcggatcggatcggatcgg'
+        self.bases = 'atcggatcgga'
         self.do_list = [(34, 348),
                         (106, 307),
                         (224, 295),
@@ -126,7 +128,7 @@ class MiniGame2(cocos.scene.Scene):
             if self.game_counter > 9:
                 self.img_to_assign='../res/minigame2/nucleotide_'+self.dna[self.game_counter].identity+letter+'.png'
                 # self.img_to_assign = pyglet.image.load(imgDir)
-                self.characters['polymerase'].work((536, 459), self.change_button_sprite)
+                self.characters['polymerase'].work((536, 459), self.change_button_sprite, self.check_victory)
             else:
                 self.img_to_assign='../res/minigame2/nucleotide_primer.png'
                 # self.img_to_assign = pyglet.image.load(imgDir)
@@ -149,9 +151,18 @@ class MiniGame2(cocos.scene.Scene):
             # if self.game_counter >= len(self.bases):
             #     self.back
 
+            # if self.game_counter >= len(self.bases):
+            # # print('back')
+            # # self.back()
+            #     self.victory_action()
+
         else:
             self.back()
         # print(self.game_counter)
+
+    def check_victory(self):
+        if self.game_counter >= len(self.bases):
+            self.victory_action()
 
     def change_button_sprite(self):
         try:
@@ -215,9 +226,5 @@ class MiniGame2(cocos.scene.Scene):
                     nucleotide.shift(*self.do_list[tempindex])
                 
                 tempindex -= 1
-
-        if self.game_counter >= len(self.bases):
-            print('back')
-            self.back()
 
 

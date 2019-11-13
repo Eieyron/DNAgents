@@ -64,6 +64,7 @@ class Button(cocos.layer.Layer):
 
         self.highlight = False
         self.hasLabel = False
+        self.hidden = False
         self.enabled = True
         self.hasInactiveSprite = False
         self.hasClickedSprite = False
@@ -117,10 +118,10 @@ class Button(cocos.layer.Layer):
     def shift_then_show(self, x, y): # 0.5
         self.spr.do(Hide()+MoveTo((x,y),0.5)+Show())
 
-    def work(self, pos, work): # 0.75
+    def work(self, pos, work, extra_work): # 0.75
         # self.set_image = img
         # origin = self.spr.position
-        work = MoveTo(pos,0.5)+CallFunc(work)+MoveTo(self.origin_position,0.25)
+        work = MoveTo(pos,0.5)+CallFunc(work)+MoveTo(self.origin_position,0.25)+CallFunc(extra_work)
 
         self.spr.do(work)
 
@@ -143,8 +144,8 @@ class Button(cocos.layer.Layer):
         repeat_forever = Repeat(MoveBy((0, 12),0.75)+MoveBy((0, -12),0.75))
         self.spr.do(repeat_forever)
 
-    def finish_moving(self):
-        repeat_forever = Repeat(MoveBy((-200, 0),0.5))
+    def finish_moving(self, work):
+        repeat_forever = MoveBy((-1280, 0),3)+CallFunc(work)
         self.spr.do(repeat_forever)
 
     def deploy(self, target):
@@ -217,7 +218,7 @@ class Button(cocos.layer.Layer):
 
     def on_mouse_press(self, x, y, button, mod):
         # print("buttin is disabled")
-        if self.onHover and self.enabled:
+        if self.onHover and self.enabled and not self.hidden:
             # self.onHover = False
             self.action()
             if self.hasClickedSprite:
@@ -281,11 +282,13 @@ class Button(cocos.layer.Layer):
         self.enabled = False
 
     def hide(self):
+        self.hidden = True
         self.spr.do(Hide())
         if self.hasLabel:
             self.label.do(Hide())
 
     def show(self):
+        self.hidden = False
         self.spr.do(Show())
         if self.hasLabel:
             self.label.do(Show())

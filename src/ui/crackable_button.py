@@ -43,7 +43,7 @@ class CrackButton(cocos.layer.ScrollableLayer):
 
     # init
 
-    def __init__(self, x, y, picDir, parent, action, toAdjust=False):
+    def __init__(self, x, y, picDir, parent, action, isSpriteSheet=False, toAdjust=False):
         global keys, container
 
         # is_event_handler = toAdjust
@@ -58,7 +58,15 @@ class CrackButton(cocos.layer.ScrollableLayer):
         self.active = True
         super().__init__()
 
-        self.image = pyglet.image.load(picDir)
+        img = pyglet.image.load(picDir)
+        self.image = img
+
+        if isSpriteSheet: #is not square
+            frames = img.width // img.height
+            # print(frames)
+            img = pyglet.image.ImageGrid(img, 1, frames, item_width=img.height, item_height=img.height)
+            im2 = pyglet.image.Animation.from_image_sequence(img[0:], 0.125, loop=True)
+            self.image = im2
 
         self.spr = cocos.sprite.Sprite(self.image, position=(x,y))
         self.spr.velocity = (0,0)
@@ -78,10 +86,6 @@ class CrackButton(cocos.layer.ScrollableLayer):
     def setInactive(self, picDir):
         self.active = False
         self.image_h = pyglet.image.load(picDir)
-
-
-    # def setVelocity(self, point):
-    #     self.velocity = point
 
     # methods
     def on_mouse_motion(self, x, y, dx, dy):

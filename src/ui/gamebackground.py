@@ -32,6 +32,9 @@ class GameBackground(cocos.layer.ScrollableLayer):
 		self.px_width = img.width
 		self.px_height = img.height
 
+		self.bg_center = (img.width/2, img.height/2)
+		print(self.bg_center)
+
 		self.add(self.bg)
 
 

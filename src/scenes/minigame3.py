@@ -30,9 +30,11 @@ from cocos.actions import *
 class MiniGame3(cocos.scene.Scene):
 
 # init
-    def __init__(self, director):
+    def __init__(self, director, mainGameLayer, victory_action):
         
         self.director = director
+        self.mainGameLayer = mainGameLayer
+        self.victory_action = victory_action
 
         super().__init__()
 
@@ -167,6 +169,9 @@ class MiniGame3(cocos.scene.Scene):
         self.director.pop()
         print("select stage back")
 
+    # def finish_level(self):
+    #     self.
+
     def change_button_sprite(self):
         try:
             self.button_to_assign.spr.image = pyglet.image.load(self.img_to_assign)
@@ -187,7 +192,7 @@ class MiniGame3(cocos.scene.Scene):
             # print('missed',self.missed)
             time.sleep(0.1)
             if self.objects_hit == self.num_to_random:
-                self.characters['squirrelboi'].finish_moving()
+                self.characters['squirrelboi'].finish_moving(self.victory_action)
             if self.missed > 0:
                 self.back()
 

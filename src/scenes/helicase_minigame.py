@@ -27,18 +27,21 @@ from ui.crack_layer import CrackLayer
 class HelicaseMinigame(cocos.scene.Scene):
 
 # init
-
-	def __init__(self, director):
+	def __init__(self, director, mainGameLayer):
 
 		super().__init__()
 
 		self.director = director
+		self.mainGameLayer = mainGameLayer
 
-		self.bases = ['A', 'C', 'T' ,'G', 'A']
+		self.bases = 'ATC'
 		self.base = 0
 		self.crack_layer = CrackLayer(2000, 2000)
 		self.count = 0
 		self.crack_flag = False
+
+		self.completed = False
+		self.victory = False
 
 		self.background = HelicaseBackground(self.bases, self.base)
 
@@ -58,7 +61,7 @@ class HelicaseMinigame(cocos.scene.Scene):
 			self.x_pos = random.randint(200, 1080)
 			self.y_pos = random.randint(200, 520)
 			print('WEWEWEW')
-			self.crack_button = CrackButton(self.x_pos, self.y_pos, '../res/helicase/ekis.png', self, self.make_crack)
+			self.crack_button = CrackButton(self.x_pos, self.y_pos, '../res/helicase/TARGET.png', self, self.make_crack, isSpriteSheet=True)
 			self.add(self.crack_button, z=1)
 			self.crack_flag = True
 
@@ -72,7 +75,7 @@ class HelicaseMinigame(cocos.scene.Scene):
 					#time.sleep(3)
 					self.x_pos = random.randint(200, 1080)
 					self.y_pos = random.randint(200, 520)
-					self.crack_button = CrackButton(self.x_pos, self.y_pos, '../res/helicase/ekis.png', self, self.make_crack)
+					self.crack_button = CrackButton(self.x_pos, self.y_pos, '../res/helicase/TARGET.png', self, self.make_crack, isSpriteSheet=True)
 					#print('WEWEWEW')
 					self.add(self.crack_button, z=1)
 					self.crack_flag = True
@@ -84,6 +87,8 @@ class HelicaseMinigame(cocos.scene.Scene):
 				self.crack_buttons()
 		else:
 			print('DOOOOONNNNEEE')
+			self.completed = True
+			self.victory = True
 			self.director.pop()
 
 	def fix_background(self):

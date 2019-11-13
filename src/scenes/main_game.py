@@ -47,7 +47,6 @@ class MainGame(cocos.scene.Scene):
             self.profile = Profile()
         else:
             self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)
-        
 
         self.case = self.profile.information['case']
 
@@ -78,7 +77,7 @@ class MainGame(cocos.scene.Scene):
 # methods
     
     def main_next(self):
-        #self.save_dir = 'profiles/save.json'
+        print('whatwhathwatht')
         if self.check_probs():
             self.profile.information['case'] += 1
             self.case += 1
@@ -86,25 +85,23 @@ class MainGame(cocos.scene.Scene):
         self.profile.save(self.save_dir)
         self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)        
 
+        # if victory:
         self.scroller.remove(self.MGLayer)
         # instantiate new Main Game Layer
         self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.dna)
         self.scroller.add(self.MGLayer, z=1)
+        self.director.pop()
 
     def check_probs(self): # checks if all probs are done
         for i in self.profile.information['problems']:
             if i == False:
                 return False
+        # return if not False in self.profile.information['problems']:
+            # return False
         return True
 
     def fix_probs(self): # checks if case has 2 probs
-        if self.case == 2:
-            self.profile.information['problems'] = [False, False]
-        elif self.case == 4:
-            self.profile.information['problems'] = [False, False]
-        elif self.case == 6:
-            self.profile.information['problems'] = [False, False]
-        elif self.case == 7:
+        if self.case in [2,4,6,7]:
             self.profile.information['problems'] = [False, False]
         else:
             self.profile.information['problems'] = [False]

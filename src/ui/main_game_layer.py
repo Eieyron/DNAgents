@@ -21,6 +21,9 @@ from ui.gamebackground import GameBackground
 from ui.pin_button import PinButton
 from ui.hero_layer import HeroLayer
 from scenes.helicase_minigame import HelicaseMinigame
+from scenes.minigame1 import MiniGame1
+from scenes.minigame2 import MiniGame2
+from scenes.minigame3 import MiniGame3
 
 # 
 #   CLASS
@@ -41,6 +44,11 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
         self.scene = scene
         self.case = case
         self.profile = profile
+
+        self.to_pop = []
+
+        self.minigame_completed = False
+
         self.background = GameBackground('../res/main_game_backgrounds/background.png')
         self.scroller.add(self.background, 0)
         self.scroller.add(self.dna, 0)
@@ -119,12 +127,52 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
 
     def choose_hero(self):
         #self.hero_popup.show()
+        # try:
+        #     self.scroller.remove(self.pin_button1)
+        #     #print('pin 1 removed')
+        # except:
+        #     print('')
+            #print('pin doesnt exist')
+        # if len(self.problem) != 1:
+            
+        #     try:
+        #         self.scroller.remove(self.pin_button2)
+        #         #print('pin 2 removed')
+        #     except:
+        #         print('')
+                #print('pin doesnt exist')
+
+
+
+        self.go_to_minigame()
+
+    def go_to_minigame(self):
+        #print(self.profile.information['minigame']) 
+        self.minigame = self.profile.information['minigame']
+
+        miniG = None
+        if self.minigame == 'helicase':
+            print('helicase')
+            miniG = MiniGame1(self.director, self, self.next_scene)
+        elif self.minigame == 'pripoly':
+            print('pripoly')
+            miniG = MiniGame2(self.director, self, self.next_scene)
+        else:
+            print('ligase')
+            # self.director.push(
+            miniG = MiniGame3(self.director, self, self.next_scene)
+
+        # th.start_new_thread(self.minigame_checker,  (miniG,))
+        self.director.push(miniG)
+        # self.scene.main_next()
+
+    def next_scene(self):
         try:
             self.scroller.remove(self.pin_button1)
             #print('pin 1 removed')
         except:
             print('')
-            #print('pin doesnt exist')
+            print('pin doesnt exist')
         if len(self.problem) != 1:
             
             try:
@@ -132,23 +180,10 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
                 #print('pin 2 removed')
             except:
                 print('')
-                #print('pin doesnt exist')
-
-        self.go_to_minigame()
+                print('pin doesnt exist')
         self.scene.main_next()
 
-
-    def go_to_minigame(self):
-        #print(self.profile.information['minigame']) 
-        self.minigame = self.profile.information['minigame']
-        if self.minigame == 'helicase':
-            print('helicase')
-            self.director.push(HelicaseMinigame(self.director))
-        elif self.minigame == 'pripoly':
-            print('pripoly')
-        else:
-            print('ligase')
-
+    # def 
 
     def add_pin(self, pin_button, i):
         i = i
