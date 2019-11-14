@@ -30,10 +30,10 @@ from cocos.actions import *
 class MiniGame3(cocos.scene.Scene):
 
 # init
-    def __init__(self, director, mainGameLayer, victory_action, fail_action):
+    def __init__(self, director, victory_action, fail_action):
         
         self.director = director
-        self.mainGameLayer = mainGameLayer
+        # self.mainGameLayer = mainGameLayer
         self.victory_action = victory_action
         self.fail_action = fail_action
 

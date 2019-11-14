@@ -135,8 +135,8 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
                 self.dna.set_background(15)
             else:
                 self.dna.set_background(13)
-            bgnum = 2
-            self.heroes_to_select = [0]
+            bgnum = 1
+            self.heroes_to_select = [3]
         else:
             self.dna.set_background(16)
         

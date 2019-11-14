@@ -64,6 +64,7 @@ class MiniGame2(cocos.scene.Scene):
                         (1076, 444),
                         (1200, 384)
                     ]
+
         # self.do_list.reverse()
         self.game_counter = 0
         self.alive_nucleotides = 5
@@ -75,7 +76,6 @@ class MiniGame2(cocos.scene.Scene):
         self.characters = {}
         self.characters['primase'] = Button(64,75, '../res/minigame2/primase_smol.png', self, self.back)
         self.characters['polymerase'] = Button(190,75, '../res/minigame2/polymerase_smol.png', self, self.back)
-
 
         self.popup_anchor = (640,360)
         self.buttons['A'] = Button(476,90,'../res/minigame2/buttons/a.png', self, self.put_a)

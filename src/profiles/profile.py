@@ -40,7 +40,8 @@ class Profile():
 			self.information = {
 				'case': 1,
 				'problems': [False],
-				'minigame': 'helicase'
+				'minigame': 'helicase',
+				'lives': 3
 			}
 
 # init
@@ -54,10 +55,13 @@ class Profile():
 		return {
 			'case' : self.information['case'],
 			'problems' : self.information['problems'],
-			'minigame': self.information['minigame']
+			'minigame': self.information['minigame'],
+			'lives' : self.information['lives'],
 		}
 
 	def save(self, saveDir):
+
+		print(self.get_serializable_information(),' saving')
 
 		with open(saveDir, 'w') as fp:
 			json.dump(self.get_serializable_information(), fp)
@@ -82,6 +86,13 @@ class Profile():
 
 	def is_finished(self, phasename):
 		return self.information['finished_levels'][phasename]
+
+	def get_lives(self):
+		return self.information['lives']
+
+	def subtract_lives(self):
+		self.information['lives'] -= 1
+		print(self.information, 'is minused')
 
 	@classmethod
 	def read_save(cls, saveDir):

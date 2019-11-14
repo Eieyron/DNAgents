@@ -130,6 +130,8 @@ class Choose_Hero(cocos.layer.ColorLayer):
             print('failed')
             self.selected = set()
             self.parent.subtract_life()
+            self.parent.profile.subtract_lives()
+            self.parent.profile.save('profiles/save.json')
             return
 
         if not len(self.to_select) == len(self.selected):
@@ -143,6 +145,7 @@ class Choose_Hero(cocos.layer.ColorLayer):
             self.selected = set()
             self.hide()
             print('success')
+            # self.parent.profile.save('profiles/save.json')
 
         else:
             # self.parent.subtract_life()

@@ -68,8 +68,10 @@ class MainGame(cocos.scene.Scene):
 
         self.pos = [600, 0]
 
-        self.life_num = 3
-        self.lives = cocos.sprite.Sprite(pyglet.image.load('../res/lives_3.png'), position=(224,637))
+
+        self.life_num = self.profile.get_lives()
+        print('new life number', self.life_num)
+        self.lives = cocos.sprite.Sprite(pyglet.image.load('../res/lives_'+str(self.life_num)+'.png'), position=(224,637))
         # self.lives = Button(224, 637, '../res/lives_3.png', self, self.back, toAdjust=True)
 
         self.scroller = cocos.layer.ScrollingManager() 
@@ -96,6 +98,11 @@ class MainGame(cocos.scene.Scene):
 # setters/getters
 
 # methods
+
+    def on_enter(self):
+        super(cocos.scene.Scene, self).on_enter()
+        # super.on_enter()
+        self.profile.save(self.save_dir)
     
     def main_next(self):
 
@@ -130,14 +137,6 @@ class MainGame(cocos.scene.Scene):
         self.popups[self.shown_popup].do(Hide())
         self.shown_popup = None
 
-    # def dismiss_popup_checker(self):
-
-    #     while not self.shown_popup == None:
-    #         time.sleep(0.125)
-    #         if 
-
-
-
     def fix_probs(self): # checks if case has 2 probs
         if self.case in [2,4,6,7]:
             self.profile.information['problems'] = [False, False]
@@ -146,6 +145,9 @@ class MainGame(cocos.scene.Scene):
 
     def failed_minigame(self):
         self.subtract_life()
+        self.profile.subtract_lives()
+        # self.profile.save(self.save_dir)
+        print(self.profile)
         self.back()
 
     def subtract_life(self):
