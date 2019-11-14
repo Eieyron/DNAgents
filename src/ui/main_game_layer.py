@@ -34,6 +34,8 @@ from scenes.minigame3 import MiniGame3
 # definition
 class MainGameLayer(cocos.layer.ScrollableLayer):
 
+    is_event_handler = True
+
 # init
     def __init__(self, director, scroller, scene, case, profile, dna):
 
@@ -149,6 +151,17 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
 # setters/getters
 
 # methods
+    def on_mouse_motion(self, x, y, dx, dy):
+        pass
+
+    def on_mouse_press(self, x, y, button, mod):
+        
+        if not self.scene.shown_popup == None:
+            self.scene.hide_popup()
+        # pass
+
+    def on_mouse_release(self, x, y, button, mod):
+        pass
 
     def choose_hero(self):
 

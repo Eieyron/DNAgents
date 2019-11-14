@@ -51,6 +51,7 @@ class MainGame(cocos.scene.Scene):
             self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)
 
         self.popups = {}
+        self.shown_popup = None
         # for name in os.
         self.popups['finish_helicase'] = cocos.sprite.Sprite(pyglet.image.load('../res/popups/finish_helicase.png'), position=(640,360))
         self.popups['fail_helicase'] = cocos.sprite.Sprite(pyglet.image.load('../res/popups/fail_helicase.png'), position=(640,360))
@@ -62,25 +63,6 @@ class MainGame(cocos.scene.Scene):
         for pop in self.popups.values():
             self.add(pop, 4)
             pop.do(Hide())
-
-        # self.dna_sequence = [  'a' if x == 0 else 
-        #                     't' if x == 1 else
-        #                     'c' if x == 2 else
-        #                     'g' if x == 3 else
-        #                     'b' for x in [random.randrange(0,4) for i in range(0,60)]]
-        # self.counter_sequence = ['a' if x == 't' else 
-        #                     't' if x == 'a' else
-        #                     'c' if x == 'g' else
-        #                     'g' if x == 'c' else
-        #                     'b' for x in self.dna_sequence]
-
-        # # print(self.dna_sequence)
-
-        # self.dna_segments = [self.dna_sequence[0:20], self.dna_sequence[20:40], self.dna_sequence[40:60]]
-        # self.counter_segments = [self.counter_sequence[0:20], self.counter_sequence[20:40], self.counter_sequence[40:60]]
-
-        # self.dna_sequence2 = self.dna_sequence[20:40]
-        # self.dna_sequence3 = self.dna_sequence[40:60]
 
         self.case = self.profile.information['case']
 
@@ -141,7 +123,20 @@ class MainGame(cocos.scene.Scene):
         return True
 
     def show_popup(self, popup_name):
-        self.popups[popup_name].do(Show()+FadeOut(3))
+        self.popups[popup_name].do(Show())
+        self.shown_popup = popup_name
+
+    def hide_popup(self):
+        self.popups[self.shown_popup].do(Hide())
+        self.shown_popup = None
+
+    # def dismiss_popup_checker(self):
+
+    #     while not self.shown_popup == None:
+    #         time.sleep(0.125)
+    #         if 
+
+
 
     def fix_probs(self): # checks if case has 2 probs
         if self.case in [2,4,6,7]:
