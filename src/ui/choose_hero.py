@@ -139,7 +139,7 @@ class Choose_Hero(cocos.layer.ColorLayer):
         elif self.to_select == self.selected:
 
             self.action()
-            self.to_select = set()
+            # self.to_select = set()
             self.selected = set()
             self.hide()
             print('success')

@@ -61,16 +61,16 @@ class MiniGame1(cocos.scene.Scene):
         self.finish_button.disable()
 
         # if strand == None:
-        #     self.strand = list('a') # defines the left strand
+        self.strand = list('a') # defines the left strand
         # else:
         #     self.strand = strand
 
-        self.strand = [ 'a' if x == 0 else 
-                        't' if x == 1 else
-                        'c' if x == 2 else
-                        'g' if x == 3 else
-                        'b' for x in [random.randrange(0,4) for i in range(0,20)]]
-        self.strand.reverse()
+        # self.strand = [ 'a' if x == 0 else 
+        #                 't' if x == 1 else
+        #                 'c' if x == 2 else
+        #                 'g' if x == 3 else
+        #                 'b' for x in [random.randrange(0,4) for i in range(0,20)]]
+        # self.strand.reverse()
         self.counter_strand = [ 'a' if x == 't' else 
                                 't' if x == 'a' else
                                 'c' if x == 'g' else

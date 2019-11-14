@@ -11,6 +11,7 @@ import _thread
 
 # class imports
 from scenes.main_game import MainGame
+from ui.cutscene import Cutscene
 
 #
 #   CLASS
@@ -51,7 +52,9 @@ class MainMenu(cocos.scene.Scene):
 
     def on_new_game(self):
         print("newgame")
-        self.director.push(MainGame(self.director, 'newgame'))
+
+        cutscene = Cutscene(self.director, 1, nextScene=MainGame(self.director, 'newgame'))
+        self.director.push(cutscene)
 
     def on_info(self):
         print("continue")

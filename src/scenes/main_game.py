@@ -24,6 +24,7 @@ from ui.scrollable_button import ScrollableButton
 from ui.hero_layer import HeroLayer
 from ui.main_game_layer import MainGameLayer
 from profiles.profile import Profile
+from cocos.actions import *
 # 
 #   CLASS
 # 
@@ -48,6 +49,19 @@ class MainGame(cocos.scene.Scene):
             self.profile = Profile()
         else:
             self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)
+
+        self.popups = {}
+        # for name in os.
+        self.popups['finish_helicase'] = cocos.sprite.Sprite(pyglet.image.load('../res/popups/finish_helicase.png'), position=(640,360))
+        self.popups['fail_helicase'] = cocos.sprite.Sprite(pyglet.image.load('../res/popups/fail_helicase.png'), position=(640,360))
+        self.popups['finish_pp'] = cocos.sprite.Sprite(pyglet.image.load('../res/popups/finish_pp.png'), position=(640,360))
+        self.popups['fail_pp'] = cocos.sprite.Sprite(pyglet.image.load('../res/popups/fail_pp.png'), position=(640,360))
+        self.popups['finish_ligase'] = cocos.sprite.Sprite(pyglet.image.load('../res/popups/finish_ligase.png'), position=(640,360))
+        self.popups['fail_ligase'] = cocos.sprite.Sprite(pyglet.image.load('../res/popups/fail_ligase.png'), position=(640,360))
+
+        for pop in self.popups.values():
+            self.add(pop, 4)
+            pop.do(Hide())
 
         # self.dna_sequence = [  'a' if x == 0 else 
         #                     't' if x == 1 else
@@ -125,6 +139,9 @@ class MainGame(cocos.scene.Scene):
             if i == False:
                 return False
         return True
+
+    def show_popup(self, popup_name):
+        self.popups[popup_name].do(Show()+FadeOut(3))
 
     def fix_probs(self): # checks if case has 2 probs
         if self.case in [2,4,6,7]:

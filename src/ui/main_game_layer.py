@@ -53,6 +53,13 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
 
         self.background = GameBackground('../res/main_game_backgrounds/background.png')
 
+        # self.popup = Button(640,360,'../res/popups/finish_pp.png', self, self.choose_hero, toAdjust=True)
+        # self.scene.add(self.popup,10)
+
+
+
+        # self.popups['finish_game'] = cocos.sprite.sprite('../res/popups/finish_game.png', position=(640,360))
+        # self.popups['fail_game'] = cocos.sprite.sprite('../res/popups/fail_game.png', position=(640,360))
 
         self.scroller.add(self.background, 0)
         self.scroller.add(self.dna, 0)
@@ -138,6 +145,7 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
             if self.problem[str(i)] == None: continue
             self.add_pin(self.problem[str(i)], i)
 
+
 # setters/getters
 
 # methods
@@ -153,14 +161,14 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
         miniG = None
         if self.minigame == 'helicase':
             print('helicase')
-            miniG = MiniGame1(self.director, self, self.next_scene, self.scene.failed_minigame)
+            miniG = MiniGame1(self.director, self, self.next_scene, self.fail_scene)
         elif self.minigame == 'pripoly':
             print('pripoly')
-            miniG = MiniGame2(self.director, self, self.next_scene, self.scene.failed_minigame)
+            miniG = MiniGame2(self.director, self, self.next_scene, self.fail_scene)
         else:
             print('ligase')
             # self.director.push(
-            miniG = MiniGame3(self.director, self, self.next_scene, self.scene.failed_minigame)
+            miniG = MiniGame3(self.director, self, self.next_scene, self.fail_scene)
 
         self.director.push(miniG)
 
@@ -179,7 +187,15 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
             except:
                 print('')
                 print('pin doesnt exist')
+
+        self.scene.show_popup('finish_'+ ('pp' if self.minigame == 'pripoly' else self.minigame))
         self.scene.main_next()
+
+    def fail_scene(self):
+
+        self.scene.show_popup('fail_'+('pp' if self.minigame == 'pripoly' else self.minigame))
+        self.scene.failed_minigame()
+
 
     # def 
 
