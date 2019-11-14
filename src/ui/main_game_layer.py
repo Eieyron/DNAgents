@@ -174,14 +174,14 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
         miniG = None
         if self.minigame == 'helicase':
             print('helicase')
-            miniG = MiniGame1(self.director, self, self.next_scene, self.fail_scene)
+            miniG = MiniGame1(self.director, self.next_scene, self.fail_scene)
         elif self.minigame == 'pripoly':
             print('pripoly')
-            miniG = MiniGame2(self.director, self, self.next_scene, self.fail_scene)
+            miniG = MiniGame2(self.director, self.next_scene, self.fail_scene)
         else:
             print('ligase')
             # self.director.push(
-            miniG = MiniGame3(self.director, self, self.next_scene, self.fail_scene)
+            miniG = MiniGame3(self.director, self.next_scene, self.fail_scene)
 
         self.director.push(miniG)
 

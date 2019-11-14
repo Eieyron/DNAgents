@@ -15,6 +15,7 @@ import pyglet
 import _thread as th
 import time
 import random
+import math
 
 
 # class imports
@@ -31,10 +32,10 @@ from cocos.actions import *
 class MiniGame2(cocos.scene.Scene):
 
 # init
-    def __init__(self, director, mainGameLayer, victory_action, fail_action):
+    def __init__(self, director, victory_action, fail_action):
         
         self.director = director
-        self.mainGameLayer = mainGameLayer
+        # self.mainGameLayer = mainGameLayer
         self.victory_action = victory_action
         self.fail_action = fail_action
 
@@ -51,6 +52,12 @@ class MiniGame2(cocos.scene.Scene):
                         'g' if x == 3 else
                         'b' for x in [random.randrange(0,4) for i in range(0,20)]]
 
+        # self.is_num = len(self.bases)-1
+            # if index in range(0,5): 
+            #     sug.do(Hide())
+
+        # self.sugar = cocos.sprite.Sprite(pyglet.image.load('../res/minigame2/sugar.png'), position=(2000,2000))
+
         self.do_list = [(34, 348),
                         (106, 307),
                         (224, 295),
@@ -64,6 +71,9 @@ class MiniGame2(cocos.scene.Scene):
                         (1076, 444),
                         (1200, 384)
                     ]
+
+        # self.position_sugar(self.sugar, self.do_list[3], self.do_list[4])
+        # self.add(self.sugar, z=11)
 
         # self.do_list.reverse()
         self.game_counter = 0
@@ -96,7 +106,18 @@ class MiniGame2(cocos.scene.Scene):
             temp.setHasInactive('../res/minigame2/nucleotide_hide.png')
             self.dna.append(temp)
 
+        self.interval_sugars = [cocos.sprite.Sprite(pyglet.image.load('../res/minigame2/upper_sugar.png'), position=(2000,2000)) for i in range(0,19)]
+        for index, sug in enumerate(self.interval_sugars):
+            self.add(sug, 1)
+            sug.do(Hide())
+
+
         self.reconfigure_dna(init=True)
+        
+        # for index, nucleotide in enumerate(self.dna):
+        #     print('dddd')
+        #     if not index == 19:
+        #         self.position_sugar(self.interval_sugars[index], self.dna[index].spr.position, nucleotide.spr.position)
 
         for button in self.buttons.values():
             self.add(button, 2)
@@ -113,6 +134,16 @@ class MiniGame2(cocos.scene.Scene):
     def back(self):
         self.director.pop()
         print("select stage back")
+
+    def position_sugar(self, sugar, block_coord, block2_coord,show=False, up=True):
+        # angle_of_rotate = -math.degrees(math.atan2((block2_coord[1]-block_coord[1]),(block2_coord[0]-block_coord[0])))
+        sugar.do(MoveTo(((block_coord[0]+block2_coord[0])/2, (block_coord[1]+block2_coord[1])/2), 0.5))
+        sugar.do(RotateTo(-math.degrees(math.atan2((block2_coord[1]-block_coord[1]),(block2_coord[0]-block_coord[0]))), 0.5)+Show())
+
+    def immediate_position_sugar(self, sugar, block_coord, block2_coord,show=False, up=True):
+        # angle_of_rotate = -math.degrees(math.atan2((block2_coord[1]-block_coord[1]),(block2_coord[0]-block_coord[0])))
+        sugar.do(MoveTo(((block_coord[0]+block2_coord[0])/2, (block_coord[1]+block2_coord[1])/2), 0)+Show())
+        sugar.do(RotateTo(-math.degrees(math.atan2((block2_coord[1]-block_coord[1]),(block2_coord[0]-block_coord[0]))), 0))
 
     def put_a(self):
         self.put_block('a')
@@ -135,34 +166,18 @@ class MiniGame2(cocos.scene.Scene):
 
             if self.game_counter > 9:
                 self.img_to_assign='../res/minigame2/nucleotide_'+self.dna[self.game_counter].identity+letter+'.png'
-                # self.img_to_assign = pyglet.image.load(imgDir)
                 self.characters['polymerase'].work((536, 459), self.change_button_sprite, self.check_victory)
             else:
-                self.img_to_assign='../res/minigame2/nucleotide_primer.png'
-                # self.img_to_assign = pyglet.image.load(imgDir)
+                self.img_to_assign='../res/minigame2/nucleotide_primer_'+self.dna[self.game_counter].identity+'.png'
                 self.throw_ball(self.characters['primase'].spr.get_rect().center, (536, 459), self.change_button_sprite)
-                # self.characters['primase'].work((536, 459), self.change_button_sprite)
-            
 
-            # time.sleep(0.5)    
-            # self.dna[5].setSprite('../res/minigame2/nucleotide_primer.png')
             if self.alive_nucleotides < 11:
                 self.alive_nucleotides += 1
             else:
                 self.buffer += 1
-            # self.alive_nucleotides += 1 if self.alive_nucleotides < 11 else 0
-            
 
             self.game_counter += 1
             self.reconfigure_dna()
-
-            # if self.game_counter >= len(self.bases):
-            #     self.back
-
-            # if self.game_counter >= len(self.bases):
-            # # print('back')
-            # # self.back()
-            #     self.victory_action()
 
         else:
             self.back()
@@ -190,7 +205,11 @@ class MiniGame2(cocos.scene.Scene):
                 else: 
                     nucleotide.set_position(*self.do_list[tempindex])
                     nucleotide.enable()
+                    if not tempindex == 0:
+                        self.immediate_position_sugar(self.interval_sugars[index],self.do_list[tempindex],self.do_list[tempindex-1])
+                        
                     tempindex -= 1
+
 
         else:
 
@@ -211,17 +230,17 @@ class MiniGame2(cocos.scene.Scene):
         maxx = self.alive_nucleotides+self.buffer
         minn = self.buffer
 
-        # print('tempindex', tempindex)
-        # print('maxx', maxx)
-        # print('minn', minn)
-
         for index, nucleotide in enumerate(self.dna):
-            
-            # print(index)
 
             if not index in range(minn, maxx+1):
                     nucleotide.disable()
                     nucleotide.shift(2000,2000)
+                    try:
+                        # pass
+                        self.position_sugar(self.interval_sugars[index],[2000,2000],[2000,2000])    
+                    except Exception as e:
+                        # raise e
+                        print('lmao')
                     # print('disabled')                                          
             else:
                 if not nucleotide.enabled:
@@ -233,6 +252,35 @@ class MiniGame2(cocos.scene.Scene):
                 else:
                     nucleotide.shift(*self.do_list[tempindex])
                 
+
+                # print(index)
+                # print(nucleotide.spr.position)
+                # print(self.dna[index+1].spr.position)
+                if not tempindex == 0:
+                    if self.do_list[tempindex][0] > 654:
+                        # print('lampas naaa')
+                        temp_coord = [self.do_list[tempindex][0],self.do_list[tempindex][1]]
+                        temp_coord[1] = temp_coord[1]+60
+
+                        temp_coord2 = [nucleotide.spr.position[0], nucleotide.spr.position[1]]
+                        temp_coord2[1] = temp_coord2[1]+60
+
+                        self.position_sugar(self.interval_sugars[index],temp_coord,temp_coord2)
+
+                    elif self.do_list[tempindex][0] > 536:
+                        
+                        temp_coord = [self.do_list[tempindex][0],self.do_list[tempindex][1]]
+                        temp_coord[1] = temp_coord[1]+60
+
+                        self.position_sugar(self.interval_sugars[index],temp_coord,nucleotide.spr.position)
+
+                    else:
+                        # try:
+                        self.position_sugar(self.interval_sugars[index],self.do_list[tempindex],nucleotide.spr.position)
+
                 tempindex -= 1
+
+            # if index%2==0:
+            # print(index)
 
 

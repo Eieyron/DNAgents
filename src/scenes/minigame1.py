@@ -31,10 +31,9 @@ from cocos.actions import *
 class MiniGame1(cocos.scene.Scene):
 
 # init
-    def __init__(self, director, mainGameLayer, victory_action, fail_action, strand=None):
+    def __init__(self, director, victory_action, fail_action, strand=None):
         
         self.director = director
-        self.mainGameLayer = mainGameLayer
         self.victory_action = victory_action
         self.fail_action = fail_action
 
@@ -176,6 +175,7 @@ class MiniGame1(cocos.scene.Scene):
     def change_button_sprite(self):
         try:
             self.current_target.spr.image = self.img_to_assign
+            self.current_target.x -= 125
         except Exception as e:
             print(e)
             # self.back()

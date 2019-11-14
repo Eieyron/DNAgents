@@ -77,7 +77,7 @@ class MiniGame3(cocos.scene.Scene):
 
 
         # self.counter_strand = 'atcgabctgagcbtagcbtagbctagbctagbctag'
-        self.counter_strand = ['a' if x == 't' else
+        self.counter_strand = [ 'a' if x == 't' else
                                 'g' if x == 'c' else
                                 'c' if x == 'g' else
                                 't' if x == 'a' else

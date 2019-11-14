@@ -19,8 +19,6 @@ from pyglet.window import key
 
 # class imports
 from scenes.mainmenu import MainMenu
-from scenes.helicase_minigame import HelicaseMinigame
-from scenes.main_game import MainGame
 from scenes.minigame2 import MiniGame2
 from scenes.minigame3 import MiniGame3
 
