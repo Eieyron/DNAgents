@@ -121,6 +121,7 @@ class Button(cocos.layer.Layer):
 
     def setHasProjection(self, picDir, position=(640,360)):
         self.hasProjection = True
+        self.projection_shown = False
         pos = self.spr.position
         pos = (pos[0]-15, pos[1]+216)
         self.project_sprite = cocos.sprite.Sprite(pyglet.image.load(picDir), position=pos)
@@ -218,14 +219,17 @@ class Button(cocos.layer.Layer):
             if self.highlight:
                 self.setSprite(self.image_h)
             if self.hasProjection:
+                print('dapat show')
                 self.project_sprite.do(Show())
+                self.projection_shown = True
 
         elif self.onHover and (not self.spr.contains(x,y)):
             self.onHover = False
             if self.highlight:
                 self.setSprite(self.image)
-            if self.hasProjection:
+            if self.hasProjection and self.projection_shown:
                 self.project_sprite.do(Hide())
+                self.projection_shown = False
 
 
     def on_mouse_press(self, x, y, button, mod):

@@ -44,9 +44,14 @@ class MiniGame2(cocos.scene.Scene):
         bg = GameBackground('../res/minigame2/minigame2_background.png')        
         self.pos = [1280, 720]
 
-        # self.youre_next = cocos.sprite.Sprite('../res/minigame2/')
+        self.youre_next = cocos.sprite.Sprite(pyglet.image.load('../res/minigame2/popup.png'), position=(640,360))
+        self.youre_next.do(Hide())
+        self.click_anywhere = Button(640,360,'../res/minigame1/finish_level_button.png', self, self.assign_next)
+        self.click_anywhere.disable()
 
         self.buttons = {}
+
+        self.next_turn = False
 
         self.bases = [  'a' if x == 0 else 
                         't' if x == 1 else
@@ -131,6 +136,8 @@ class MiniGame2(cocos.scene.Scene):
             self.add(nucleotide, 2)
 
         self.add(bg, 0)
+        self.add(self.youre_next, 4)
+        self.add(self.click_anywhere, 4)
 
 # methods
     def back(self):
@@ -159,6 +166,11 @@ class MiniGame2(cocos.scene.Scene):
     def put_g(self):
         self.put_block('g')
 
+    def assign_next(self):
+        print('assign next')
+        self.next_turn = False
+        self.youre_next.do(FadeOut(0.125)+Hide())
+
     def put_block(self, letter):
 
         if self.game_counter < len(self.bases): 
@@ -166,7 +178,14 @@ class MiniGame2(cocos.scene.Scene):
             
             self.button_to_assign = self.dna[self.game_counter]
 
-            if self.game_counter > 9:
+            if self.next_turn:
+                self.youre_next.do(Show())
+                self.youre_next.opacity = 0
+                self.youre_next.do(FadeIn(0.125))
+                # self.game_counter += 0.5
+                self.click_anywhere.enable()
+                return
+            elif self.game_counter > 9:
                 self.img_to_assign='../res/minigame2/nucleotide_'+self.dna[self.game_counter].identity+letter+'.png'
                 self.characters['polymerase'].work((536, 459), self.change_button_sprite, self.check_victory)
             else:
@@ -179,6 +198,8 @@ class MiniGame2(cocos.scene.Scene):
                 self.buffer += 1
 
             self.game_counter += 1
+            if self.game_counter == 10:
+                self.next_turn = True
             self.reconfigure_dna()
 
         else:

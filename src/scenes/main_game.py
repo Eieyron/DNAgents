@@ -22,6 +22,7 @@ from ui.button import Button
 from ui.gamebackground import GameBackground
 from ui.scrollable_button import ScrollableButton
 from ui.hero_layer import HeroLayer
+from ui.cutscene import Cutscene
 from ui.main_game_layer import MainGameLayer
 from profiles.profile import Profile
 from cocos.actions import *
