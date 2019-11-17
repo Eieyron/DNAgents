@@ -46,6 +46,12 @@ class MiniGame1(cocos.scene.Scene):
 
         # bg = GameBackground('../res/minigame1/end/click anywhere to continue.png')
 
+        self.dp = cocos.sprite.Sprite(pyglet.image.load('../res/Profile_picture/Helicase_Active_Agent.png'), position=(350,665))
+        # self.dp = Button(350,665, '../res/Profile_picture/Helicase_Active_Agent.png', self, self.back, toAdjust=True)
+        self.add(self.dp, 11)
+
+        # jill_dorothy_monzon
+
         self.accomplished_targets = 0
         self.target_eliminated = False
 
@@ -68,16 +74,16 @@ class MiniGame1(cocos.scene.Scene):
 
 
         # if strand == None:
-        self.strand = list('a') # defines the left strand
+        # self.strand = list('a') # defines the left strand
         # else:
         #     self.strand = strand
 
-        # self.strand = [ 'a' if x == 0 else 
-        #                 't' if x == 1 else
-        #                 'c' if x == 2 else
-        #                 'g' if x == 3 else
-        #                 'b' for x in [random.randrange(0,4) for i in range(0,20)]]
-        # self.strand.reverse()
+        self.strand = [ 'a' if x == 0 else 
+                        't' if x == 1 else
+                        'c' if x == 2 else
+                        'g' if x == 3 else
+                        'b' for x in [random.randrange(0,4) for i in range(0,20)]]
+        self.strand.reverse()
         self.counter_strand = [ 'a' if x == 't' else 
                                 't' if x == 'a' else
                                 'c' if x == 'g' else

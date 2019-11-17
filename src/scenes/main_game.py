@@ -108,7 +108,6 @@ class MainGame(cocos.scene.Scene):
     
     def main_next(self):
 
-        print('whatwhathwatht')
         if self.check_probs():
             self.profile.information['case'] += 1
             self.case += 1
@@ -116,17 +115,17 @@ class MainGame(cocos.scene.Scene):
         self.profile.save(self.save_dir)
         self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)
 
-        if self.case == 8:
-            cutscene = Cutscene(self.director, 2)
-            self.director.replace(cutscene)
-        else:
+        # if self.case == 8:
+            # cutscene = Cutscene(self.director, 2)
+            # self.director.replace(cutscene)
+        # else:
             # if victory:
-            self.remove(self.MGLayer.ch_layer)
-            self.scroller.remove(self.MGLayer)
-            # instantiate new Main Game Layer
-            self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.dna)
-            self.scroller.add(self.MGLayer, z=1)
-            self.director.pop()
+        self.remove(self.MGLayer.ch_layer)
+        self.scroller.remove(self.MGLayer)
+        # instantiate new Main Game Layer
+        self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.dna)
+        self.scroller.add(self.MGLayer, z=1)
+        self.director.pop()
 
     def check_probs(self): # checks if all probs are done
 
@@ -142,6 +141,9 @@ class MainGame(cocos.scene.Scene):
     def hide_popup(self):
         self.popups[self.shown_popup].do(Hide())
         self.shown_popup = None
+        if self.case == 8:
+            cutscene = Cutscene(self.director, 2)
+            self.director.replace(cutscene)
 
     def fix_probs(self): # checks if case has 2 probs
         if self.case in [2,4,6,7]:
@@ -204,7 +206,5 @@ class MainGame(cocos.scene.Scene):
     def pos_op(self, op):
         if op == 'add':
             self.pos[0] = self.pos[0] + 16/2
-            #self.pos[1] = self.pos[1] + 9/2
         else:
             self.pos[0] = self.pos[0] - 16/2
-            #self.pos[1] = self.pos[1] - 9/2

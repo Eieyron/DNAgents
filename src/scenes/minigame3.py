@@ -44,6 +44,11 @@ class MiniGame3(cocos.scene.Scene):
         self.bg3 = cocos.sprite.Sprite(pyglet.image.load('../res/minigame3/longcloud.png'),position=(640,360))        
         self.pos = [1280, 720]
 
+        self.dp = cocos.sprite.Sprite(pyglet.image.load('../res/Profile_picture/Ligase_Active_Agent.png'), position=(350,665))
+        # self.dp = Button(350,665, '../res/Profile_picture/Helicase_Active_Agent.png', self, self.back, toAdjust=True)
+        self.add(self.dp, 11)
+
+
         self.buttons = {}
 
         # self.buttons['boi'] = Button(640,360, '../res/boi.png', self, self.back, isSpriteSheet=True)
@@ -141,6 +146,7 @@ class MiniGame3(cocos.scene.Scene):
 
         self.characters = {}
         self.characters['squirrelboi'] = Button(970,549,'../res/minigame3/squirrelboi.png', self, self.back)
+        # self.characters['squirrelboi'] = Button(970,549,'../res/minigame3/squirrelboi.png', self, self.back)
         self.characters['squirrelboi'].move_up_and_down()
 
         for button in self.buttons.values():

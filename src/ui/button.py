@@ -47,7 +47,7 @@ class Button(cocos.layer.Layer):
 
     # init
 
-    def __init__(self, x, y, picDir, parent, action, isSpriteSheet=False, name=None, toAdjust=False):
+    def __init__(self, x, y, picDir, parent, action, isSpriteSheet=False, name=None, toAdjust=False, speed=0.25):
         global keys, container
 
         # is_event_handler = toAdjust
@@ -83,7 +83,7 @@ class Button(cocos.layer.Layer):
             frames = img.width // img.height
             # print(frames)
             img = pyglet.image.ImageGrid(img, 1, frames, item_width=img.height, item_height=img.height)
-            im2 = pyglet.image.Animation.from_image_sequence(img[0:], 0.25, loop=True)
+            im2 = pyglet.image.Animation.from_image_sequence(img[0:], speed, loop=True)
             self.image = im2
     
         self.spr = cocos.sprite.Sprite(self.image, position=(x,y))
@@ -219,8 +219,9 @@ class Button(cocos.layer.Layer):
             if self.highlight:
                 self.setSprite(self.image_h)
             if self.hasProjection:
-                print('dapat show')
-                self.project_sprite.do(Show())
+                # print('dapat show')
+                self.project_sprite.opacity = 0
+                self.project_sprite.do(Show()+FadeIn(0.125))
                 self.projection_shown = True
 
         elif self.onHover and (not self.spr.contains(x,y)):
@@ -228,7 +229,7 @@ class Button(cocos.layer.Layer):
             if self.highlight:
                 self.setSprite(self.image)
             if self.hasProjection and self.projection_shown:
-                self.project_sprite.do(Hide())
+                self.project_sprite.do(FadeOut(0.125)+Hide())
                 self.projection_shown = False
 
 

@@ -44,10 +44,24 @@ class MiniGame2(cocos.scene.Scene):
         bg = GameBackground('../res/minigame2/minigame2_background.png')        
         self.pos = [1280, 720]
 
-        self.youre_next = cocos.sprite.Sprite(pyglet.image.load('../res/minigame2/popup.png'), position=(640,360))
+        self.youre_next = cocos.sprite.Sprite(pyglet.image.load('../res/minigame2/popup.png'), position=(255,330))
         self.youre_next.do(Hide())
         self.click_anywhere = Button(640,360,'../res/minigame1/finish_level_button.png', self, self.assign_next)
         self.click_anywhere.disable()
+
+        self.arrow_down = Button(550,560,'../res/minigame2/arrow_sprite_sheet.png', self, self.victory_action, isSpriteSheet=True, speed=0.125)
+        self.add(self.arrow_down, 4)
+
+        self.dp1 = cocos.sprite.Sprite(pyglet.image.load('../res/Profile_picture/Polymerase_Active_Agent.png'), position=(811,665))
+        # self.dp1 = Button(850,665, '../res/Profile_picture/Helicase_Active_Agent.png', self, self.back, toAdjust=True)
+        self.dp2 = cocos.sprite.Sprite(pyglet.image.load('../res/Profile_picture/Primase_Active_Agent.png'), position=(350,665))
+        # self.dp = Button(350,665, '../res/Profile_picture/Helicase_Active_Agent.png', self, self.back, toAdjust=True)
+        self.add(self.dp2, 11)
+        self.add(self.dp1, 11)
+
+        self.platform = cocos.sprite.Sprite(pyglet.image.load('../res/minigame2/buttons/platform.png'), position=(620,94))
+        # self.platform = Button(640,360,'../res/minigame2/buttons/platform.png', self, self.back, toAdjust=True)
+        self.add(self.platform, 1)
 
         self.buttons = {}
 
@@ -87,8 +101,8 @@ class MiniGame2(cocos.scene.Scene):
         self.alive_nucleotides = 5
         self.buffer = 0
 
-        self.buttons['back'] = Button(78,666, '../res/back_button.png', self, self.back)
-        self.buttons['back'].setHasHighlight('../res/back_button_h.png')
+        self.buttons['back'] = Button(78,666, '../res/main_left.png', self, self.back)
+        self.buttons['back'].setHasHighlight('../res/main_left_h.png')
 
         self.characters = {}
         self.characters['primase'] = Button(64,75, '../res/minigame2/primase_smol.png', self, self.back)
@@ -103,6 +117,8 @@ class MiniGame2(cocos.scene.Scene):
         self.buttons['C'].setHasClicked('../res/minigame2/buttons/c_p.png')
         self.buttons['G'] = Button(776,90,'../res/minigame2/buttons/g.png', self, self.put_g)
         self.buttons['G'].setHasClicked('../res/minigame2/buttons/g_p.png')
+        self.buttons['P'] = Button(630,90,'../res/minigame2/buttons/p.png', self, self.put_p)
+        self.buttons['P'].setHasClicked('../res/minigame2/buttons/p_p.png')
 
         self.dna = []
 
@@ -126,8 +142,11 @@ class MiniGame2(cocos.scene.Scene):
         #     if not index == 19:
         #         self.position_sugar(self.interval_sugars[index], self.dna[index].spr.position, nucleotide.spr.position)
 
-        for button in self.buttons.values():
+        for key, button in self.buttons.items():
             self.add(button, 2)
+            if not key in ['P','back']:
+                button.do(Hide())
+                button.disable()
 
         for character in self.characters.values():
             self.add(character, 3)
@@ -144,6 +163,18 @@ class MiniGame2(cocos.scene.Scene):
         self.director.pop()
         print("select stage back")
 
+    def activate_nucleobuttons(self):
+        for key, button in self.buttons.items():
+            if key in ['A','T','C','G']:
+                button.opacity = 0
+                button.enable()
+                button.do(Show()+FadeIn(0.125))
+            elif key in ['P']:
+                button.do(FadeOut(0.125)+Hide())
+                button.disable()
+
+
+
     def position_sugar(self, sugar, block_coord, block2_coord,show=False, up=True):
         # angle_of_rotate = -math.degrees(math.atan2((block2_coord[1]-block_coord[1]),(block2_coord[0]-block_coord[0])))
         sugar.do(MoveTo(((block_coord[0]+block2_coord[0])/2, (block_coord[1]+block2_coord[1])/2), 0.5))
@@ -155,21 +186,31 @@ class MiniGame2(cocos.scene.Scene):
         sugar.do(RotateTo(-math.degrees(math.atan2((block2_coord[1]-block_coord[1]),(block2_coord[0]-block_coord[0]))), 0))
 
     def put_a(self):
+        print('a')
         self.put_block('a')
 
     def put_t(self):
+        print('T')
         self.put_block('t')
 
     def put_c(self):
+        print('C')
         self.put_block('c')
 
     def put_g(self):
+        print('G')
         self.put_block('g')
+
+    def put_p(self):
+        print('p')
+        self.put_block('p')
 
     def assign_next(self):
         print('assign next')
         self.next_turn = False
         self.youre_next.do(FadeOut(0.125)+Hide())
+        self.activate_nucleobuttons()
+        self.click_anywhere.disable()
 
     def put_block(self, letter):
 
@@ -179,10 +220,8 @@ class MiniGame2(cocos.scene.Scene):
             self.button_to_assign = self.dna[self.game_counter]
 
             if self.next_turn:
-                self.youre_next.do(Show())
                 self.youre_next.opacity = 0
-                self.youre_next.do(FadeIn(0.125))
-                # self.game_counter += 0.5
+                self.youre_next.do(Show()+FadeIn(0.125))
                 self.click_anywhere.enable()
                 return
             elif self.game_counter > 9:
