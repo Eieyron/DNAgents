@@ -59,7 +59,6 @@ class Cutscene(cocos.scene.Scene):
 
 		self.director = director
 		self.backscene = self.director.scene
-		# self.profile = profile
 		self.video_number = video_number
 		self.videoDirectory = '../res/cutscenes/cutscene'+str(video_number)+'.mov'
 		self.nextScene = nextScene
@@ -67,8 +66,6 @@ class Cutscene(cocos.scene.Scene):
 		print("loading: ", self.videoDirectory)
 
 		self.skipped = False
-
-		# self.skippable = profile.get_cutscenes_watched()[video_number-1]
 
 		self.skippable = True
 
@@ -133,10 +130,6 @@ class Cutscene(cocos.scene.Scene):
 			else:
 				self.director.pop()
 				self.do_misc()
-
-	# def play(self):
-	# 	self.vidLayer.play()
-
 
 # init
 

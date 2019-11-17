@@ -39,10 +39,17 @@ class MiniGame1(cocos.scene.Scene):
 
         super().__init__()
 
-        bg = GameBackground('../res/minigame1/finish_level.png')
+        self.finish_level_pictures = {}
+        # self.finish_level_pictures['0']=cocos.
+        for i in range(0,5):
+            self.finish_level_pictures[str(i)] = cocos.sprite.Sprite(pyglet.image.load('../res/minigame1/End/'+str(i)+'.png'), position=(640,360))
+
+        # bg = GameBackground('../res/minigame1/end/click anywhere to continue.png')
 
         self.accomplished_targets = 0
         self.target_eliminated = False
+
+        self.bg_index = 0
 
         self.completed = False
         self.victory = False
@@ -56,8 +63,9 @@ class MiniGame1(cocos.scene.Scene):
         self.buttons['back'] = Button(53,666, '../res/main_left.png', self, self.back)
         self.buttons['back'].setHasHighlight('../res/main_left_h.png')
 
-        self.finish_button = Button(811,255, '../res/minigame1/finish_level_button.png', self, self.finish_level)
+        self.finish_button = Button(640, 360, '../res/minigame1/finish_level_button.png', self, self.next_image)
         self.finish_button.disable()
+
 
         # if strand == None:
         self.strand = list('a') # defines the left strand
@@ -103,7 +111,10 @@ class MiniGame1(cocos.scene.Scene):
         self.ad = Arm_Deployer(self,self.back)
 
         self.add(self.ad,4)
-        self.add(bg,0)   
+        # self.add(self.finish_level_pictures[0],0)   
+        for i in range(4,-1,-1):
+            self.add(self.finish_level_pictures[str(i)],0)
+
         self.add(self.finish_button,0)
 
         # th.start_new_thread(self.run_game, ())
@@ -115,6 +126,15 @@ class MiniGame1(cocos.scene.Scene):
         # self.completed = True
         self.director.pop()
         print("select stage back")
+
+    def next_image(self):
+        # pass
+        if not self.bg_index == 4: 
+            self.finish_level_pictures[str(self.bg_index)].do(FadeOut(1))
+            self.bg_index += 1
+        else:
+            self.finish_level()
+
 
     def finish_level(self):
         # self.victory = True

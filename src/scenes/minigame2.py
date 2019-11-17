@@ -44,6 +44,8 @@ class MiniGame2(cocos.scene.Scene):
         bg = GameBackground('../res/minigame2/minigame2_background.png')        
         self.pos = [1280, 720]
 
+        # self.youre_next = cocos.sprite.Sprite('../res/minigame2/')
+
         self.buttons = {}
 
         self.bases = [  'a' if x == 0 else 

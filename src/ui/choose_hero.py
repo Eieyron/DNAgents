@@ -145,10 +145,7 @@ class Choose_Hero(cocos.layer.ColorLayer):
             self.selected = set()
             self.hide()
             print('success')
-            # self.parent.profile.save('profiles/save.json')
-
         else:
-            # self.parent.subtract_life()
             return
 
     def hide(self):
@@ -160,6 +157,8 @@ class Choose_Hero(cocos.layer.ColorLayer):
         self.bg.do(Hide())
         for button in self.buttons.values():
             button.do(Hide())
+            button.disable()
+
 
     def show(self):
 
@@ -170,3 +169,4 @@ class Choose_Hero(cocos.layer.ColorLayer):
         self.bg.do(Show())
         for button in self.buttons.values():
             button.do(Show())
+            button.enable()

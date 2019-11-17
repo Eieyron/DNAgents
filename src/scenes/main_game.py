@@ -68,11 +68,9 @@ class MainGame(cocos.scene.Scene):
 
         self.pos = [600, 0]
 
-
         self.life_num = self.profile.get_lives()
         print('new life number', self.life_num)
         self.lives = cocos.sprite.Sprite(pyglet.image.load('../res/lives_'+str(self.life_num)+'.png'), position=(224,637))
-        # self.lives = Button(224, 637, '../res/lives_3.png', self, self.back, toAdjust=True)
 
         self.scroller = cocos.layer.ScrollingManager() 
         self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.dna)
@@ -103,6 +101,9 @@ class MainGame(cocos.scene.Scene):
         super(cocos.scene.Scene, self).on_enter()
         # super.on_enter()
         self.profile.save(self.save_dir)
+        self.MGLayer.ch_layer.hide()
+        print(self.MGLayer.ch_layer.__class__.is_event_handler)
+
     
     def main_next(self):
 
@@ -112,15 +113,19 @@ class MainGame(cocos.scene.Scene):
             self.case += 1
             self.fix_probs()
         self.profile.save(self.save_dir)
-        self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)        
+        self.profile = Profile() if not os.path.exists(self.save_dir) else Profile.read_save(self.save_dir)
 
-        # if victory:
-        self.remove(self.MGLayer.ch_layer)
-        self.scroller.remove(self.MGLayer)
-        # instantiate new Main Game Layer
-        self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.dna)
-        self.scroller.add(self.MGLayer, z=1)
-        self.director.pop()
+        if self.case == 8:
+            cutscene = Cutscene(self.director, 2)
+            self.director.replace(cutscene)
+        else:
+            # if victory:
+            self.remove(self.MGLayer.ch_layer)
+            self.scroller.remove(self.MGLayer)
+            # instantiate new Main Game Layer
+            self.MGLayer = MainGameLayer(self.director, self.scroller, self, self.case, self.profile, self.dna)
+            self.scroller.add(self.MGLayer, z=1)
+            self.director.pop()
 
     def check_probs(self): # checks if all probs are done
 
