@@ -40,7 +40,8 @@ class MiniGame3(cocos.scene.Scene):
         super().__init__()
 
         bg = GameBackground('../res/minigame3/minigame3_background.png')        
-        bg2 = GameBackground('../res/minigame3/nearplane.png')        
+        bg2 = GameBackground('../res/minigame3/nearplane.png')
+        self.bg3 = cocos.sprite.Sprite(pyglet.image.load('../res/minigame3/longcloud.png'),position=(640,360))        
         self.pos = [1280, 720]
 
         self.buttons = {}
@@ -62,7 +63,7 @@ class MiniGame3(cocos.scene.Scene):
                         't' if x == 1 else
                         'c' if x == 2 else
                         'g' if x == 3 else
-                        'b' for x in [random.randrange(0,4) for i in range(0,20)]]
+                        'b' for x in [random.randrange(0,4) for i in range(0,60)]]
 
         # self.land_blocks = {}
         self.dna = []
@@ -84,7 +85,7 @@ class MiniGame3(cocos.scene.Scene):
                                 'b' for x in self.strand]
 
         # self.num_to_random = [x for x in ]
-        self.num_to_random = 6
+        self.num_to_random = 20
         # counter = self.num_to_random
         self.rand_list = random.sample(range(7,len(self.strand)),self.num_to_random)
         self.rand_list.sort()
@@ -165,9 +166,11 @@ class MiniGame3(cocos.scene.Scene):
         #     self.add(nucleotide, 2)
 
         self.add(bg, 0)
+        self.add(self.bg3, 1)
         self.add(bg2, 3)
         self.add(Bomb_Deployer(self, self.deployed))
 
+        self.bg3.do(Repeat(MoveBy((10,0),1)))
         th.start_new_thread(self.endgame_checker, ())
 
 # methods

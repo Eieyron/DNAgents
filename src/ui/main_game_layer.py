@@ -55,27 +55,12 @@ class MainGameLayer(cocos.layer.ScrollableLayer):
 
         self.background = GameBackground('../res/main_game_backgrounds/background.png')
 
-        # self.popup = Button(640,360,'../res/popups/finish_pp.png', self, self.choose_hero, toAdjust=True)
-        # self.scene.add(self.popup,10)
-
-
-
-        # self.popups['finish_game'] = cocos.sprite.sprite('../res/popups/finish_game.png', position=(640,360))
-        # self.popups['fail_game'] = cocos.sprite.sprite('../res/popups/fail_game.png', position=(640,360))
-
         self.scroller.add(self.background, 0)
         self.scroller.add(self.dna, 0)
-        #self.add_pin_test(1000, 360)
         
         # handling cases and problems in main game
         self.problem = {}
 
-        # MINI GAMES
-        '''
-            helicase    
-            pripoly (primase and polymirase)
-            ligase
-        '''
         bgnum = 1
         if case == 1:
             self.problem['1'] = PinButton(157, 424, '../res/pin.png', 'helicase', self, self.profile, 0, self.choose_hero)

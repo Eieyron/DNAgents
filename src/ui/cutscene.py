@@ -10,8 +10,8 @@
 # imports
 import cocos
 import pyglet
-# pyglet.lib.load_library('avbin64')
-# pyglet.have_avbin=True
+pyglet.lib.load_library('avbin64')
+pyglet.have_avbin=True
 import _thread as th
 import time
 
@@ -61,7 +61,7 @@ class Cutscene(cocos.scene.Scene):
 		self.backscene = self.director.scene
 		# self.profile = profile
 		self.video_number = video_number
-		self.videoDirectory = '../res/cutscenes/cutscene'+str(video_number)+'.mp4'
+		self.videoDirectory = '../res/cutscenes/cutscene'+str(video_number)+'.mov'
 		self.nextScene = nextScene
 
 		print("loading: ", self.videoDirectory)
