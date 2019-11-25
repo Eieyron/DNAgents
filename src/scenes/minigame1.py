@@ -46,11 +46,8 @@ class MiniGame1(cocos.scene.Scene):
 
         # bg = GameBackground('../res/minigame1/end/click anywhere to continue.png')
 
-        self.dp = cocos.sprite.Sprite(pyglet.image.load('../res/Profile_picture/Helicase_Active_Agent.png'), position=(350,665))
-        # self.dp = Button(350,665, '../res/Profile_picture/Helicase_Active_Agent.png', self, self.back, toAdjust=True)
+        self.dp = Button(350,665, '../res/Profile_picture/Helicase_Active_Agent.png', self, self.victory_action)
         self.add(self.dp, 11)
-
-        # jill_dorothy_monzon
 
         self.accomplished_targets = 0
         self.target_eliminated = False
