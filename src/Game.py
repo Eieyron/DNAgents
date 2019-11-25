@@ -36,10 +36,6 @@ def main():
     director.window.pop_handlers()
 
     director.run(MainMenu(director))
-    # director.run(MiniGame1(director, None, None))
-    # director.run(MiniGame2(director, None, None))
-    # director.run(MiniGame3(director, None, None))
-
 
 if __name__ == '__main__':
     main()
